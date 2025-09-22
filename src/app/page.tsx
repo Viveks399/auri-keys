@@ -4,8 +4,7 @@ export default function Home() {
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 overflow-hidden bg-white">
       {/* Background Image with Enhanced Effects */}
-      <div className="absolute inset-0 z-0">
-      </div>
+      <div className="absolute inset-0 z-0"></div>
 
       {/* Content */}
       <div className="relative z-10 max-w-2xl mx-auto text-center">
@@ -26,7 +25,7 @@ export default function Home() {
             Website Under Maintenance
           </h2>
           <p className="text-base text-gray-500 max-w-md mx-auto leading-relaxed font-light drop-shadow-sm">
-            We're building something beautiful for you. Coming soon.
+            We&apos;re building something beautiful for you. Coming soon.
           </p>
         </div>
       </div>
