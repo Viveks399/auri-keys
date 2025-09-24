@@ -5,7 +5,7 @@ export default function Home() {
     <div className="min-h-screen relative flex items-start justify-center px-4 overflow-hidden bg-white pt-5 sm:pt-10 md:pt-38">
       {/* Background Image with Enhanced Effects */}
       <div className="absolute inset-0 z-0">
-        {/* Desktop Background Image */}
+        {/* Desktop background Image */}
         <Image
           src="/assets/images/auri-keys-bg.jpg"
           alt="Auri Keys Background"
