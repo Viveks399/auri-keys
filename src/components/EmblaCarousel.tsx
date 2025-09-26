@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import {
   EmblaCarouselType,
   EmblaEventType,
@@ -25,16 +26,25 @@ const MemoizedSlide = React.memo(({ slide, index, selectedIndex }: {
   }
   index: number
   selectedIndex: number
-}) => (
+}) => {
+  const [imageLoaded, setImageLoaded] = React.useState(false);
+
+  return (
   <div className="embla__slide">
     <div className="embla__parallax">
-      <div className="embla__parallax__layer">
-        <img
-          className="embla__slide__img embla__parallax__img"
+      <div className="embla__parallax__layer relative">
+        {/* Loading skeleton */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-gray-800 animate-pulse" />
+        )}
+        <Image
+          className={`embla__slide__img embla__parallax__img transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           src={slide.src}
           alt={slide.alt}
-          loading={index === 0 ? 'eager' : 'lazy'}
-          decoding="async"
+          fill
+          priority={index === 0}
+          unoptimized={true}
+          onLoad={() => setImageLoaded(true)}
         />
       </div>
       
@@ -102,7 +112,8 @@ const MemoizedSlide = React.memo(({ slide, index, selectedIndex }: {
       </div>
     </div>
   </div>
-))
+  );
+})
 
 MemoizedSlide.displayName = 'MemoizedSlide'
 
@@ -120,8 +131,12 @@ type PropType = {
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { slides, options } = props
+  
   const [emblaRef, emblaApi] = useEmblaCarousel(options)
   const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [isAutoplayActive, setIsAutoplayActive] = React.useState(true)
+  const [isPageVisible, setIsPageVisible] = React.useState(true)
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const tweenFactor = useRef(0)
   const tweenNodes = useRef<HTMLElement[]>([])
 
@@ -185,10 +200,100 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       .on('scroll', updateParallax)
       .on('slideFocus', updateParallax)
       .on('select', onSelect)
+
+    // Cleanup function
+    return () => {
+      if (emblaApi) {
+        emblaApi.off('reInit', initializeParallax)
+        emblaApi.off('reInit', updateParallax)
+        emblaApi.off('scroll', updateParallax)
+        emblaApi.off('slideFocus', updateParallax)
+        emblaApi.off('select', onSelect)
+      }
+    }
   }, [emblaApi, initializeParallax, updateParallax])
 
+  // Autoplay management
+  const startAutoplay = React.useCallback(() => {
+    if (!emblaApi || autoplayIntervalRef.current) return
+    
+    autoplayIntervalRef.current = setInterval(() => {
+      if (emblaApi && isAutoplayActive && isPageVisible) {
+        emblaApi.scrollNext()
+      }
+    }, 3000)
+  }, [emblaApi, isAutoplayActive, isPageVisible])
+  
+  const stopAutoplay = React.useCallback(() => {
+    if (autoplayIntervalRef.current) {
+      clearInterval(autoplayIntervalRef.current)
+      autoplayIntervalRef.current = null
+    }
+  }, [])
+
+  // Page visibility detection
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      const isVisible = !document.hidden
+      setIsPageVisible(isVisible)
+      
+      if (isVisible && isAutoplayActive) {
+        // Page became visible, restart autoplay
+        startAutoplay()
+      } else if (!isVisible) {
+        // Page became hidden, stop autoplay
+        stopAutoplay()
+      }
+    }
+
+    // Listen for visibility changes
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    // Listen for window focus/blur (for minimize/restore)
+    const handleFocus = () => {
+      setIsPageVisible(true)
+      if (isAutoplayActive) startAutoplay()
+    }
+    
+    const handleBlur = () => {
+      setIsPageVisible(false)
+      stopAutoplay()
+    }
+    
+    window.addEventListener('focus', handleFocus)
+    window.addEventListener('blur', handleBlur)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
+      window.removeEventListener('blur', handleBlur)
+    }
+  }, [isAutoplayActive, startAutoplay, stopAutoplay])
+
+  // Initialize autoplay
+  useEffect(() => {
+    if (!emblaApi) return
+    
+    startAutoplay()
+    
+    return () => {
+      stopAutoplay()
+    }
+  }, [emblaApi, startAutoplay, stopAutoplay])
+
+  // Hover handlers for pause/resume autoplay
+  const handleMouseEnter = React.useCallback(() => {
+    setIsAutoplayActive(false)
+    stopAutoplay()
+  }, [stopAutoplay])
+  
+  const handleMouseLeave = React.useCallback(() => {
+    setIsAutoplayActive(true)
+    startAutoplay()
+  }, [startAutoplay])
+
   return (
-    <div className="embla">
+    <div className="embla" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           {slides.map((slide, index) => (

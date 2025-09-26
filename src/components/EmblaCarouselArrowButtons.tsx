@@ -1,4 +1,5 @@
 import React from 'react'
+import { EmblaCarouselType } from 'embla-carousel'
 
 interface ButtonProps {
   onClick: () => void;
@@ -31,7 +32,7 @@ ArrowButton.displayName = 'ArrowButton';
 export const PrevButton = (props: Omit<ButtonProps, 'direction'>) => <ArrowButton {...props} direction="prev" />;
 export const NextButton = (props: Omit<ButtonProps, 'direction'>) => <ArrowButton {...props} direction="next" />;
 
-export const usePrevNextButtons = (emblaApi: any) => {
+export const usePrevNextButtons = (emblaApi: EmblaCarouselType | undefined) => {
   const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true)
 
@@ -43,7 +44,7 @@ export const usePrevNextButtons = (emblaApi: any) => {
     if (emblaApi) emblaApi.scrollNext()
   }, [emblaApi])
 
-  const onSelect = React.useCallback((emblaApi: any) => {
+  const onSelect = React.useCallback((emblaApi: EmblaCarouselType) => {
     setPrevBtnDisabled(!emblaApi.canScrollPrev())
     setNextBtnDisabled(!emblaApi.canScrollNext())
   }, [])
