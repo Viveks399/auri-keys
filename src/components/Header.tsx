@@ -1,8 +1,11 @@
 import Link from "next/link";
 
+// Common styles for navigation links
+const navLinkClasses = "text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors";
+
 export default function Header() {
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 bg-white/10 backdrop-blur-sm w-[70%] rounded-2xl shadow-lg mx-auto">
+    <header className="fixed top-4 left-0 right-0 z-50 bg-white/10 backdrop-blur-sm w-[85%] md:w-[70%] rounded-4xl shadow-lg mx-auto">
        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -15,28 +18,16 @@ export default function Header() {
           {/* Navigation */}
           <nav className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              <Link 
-                href="/" 
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
-              >
+              <Link href="/" className={navLinkClasses}>
                 Home
               </Link>
-              <Link 
-                href="/properties" 
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
-              >
+              <Link href="/properties" className={navLinkClasses}>
                 Properties
               </Link>
-              <Link 
-                href="/about" 
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
-              >
+              <Link href="/about" className={navLinkClasses}>
                 About
               </Link>
-              <Link 
-                href="/contact" 
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
-              >
+              <Link href="/contact" className={navLinkClasses}>
                 Contact
               </Link>
             </div>
