@@ -1,13 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-
-// Dynamically import heavy components
-const Beams = dynamic(() => import('@/components/Beams'), {
-  ssr: false,
-  loading: () => null
-});
 
 const EmblaCarousel = dynamic(() => import('@/components/EmblaCarousel'), {
   loading: () => (
@@ -18,17 +11,6 @@ const EmblaCarousel = dynamic(() => import('@/components/EmblaCarousel'), {
 });
 
 export default function Home() {
-  const [showBeams, setShowBeams] = useState(false);
-
-  useEffect(() => {
-    // Only show beams on desktop and high-end devices
-    const isHighEndDevice = 
-      window.innerWidth > 768 && 
-      navigator.hardwareConcurrency > 4 &&
-      !navigator.userAgent.includes('Mobile');
-    
-    setShowBeams(isHighEndDevice);
-  }, []);
 
   const carouselSlides = [
     {
@@ -58,25 +40,8 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-black relative">
-      {/* ReactBits Animation Background - Only on high-end devices */}
-      {showBeams && (
-        <div style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0 }}>
-          <Beams
-            beamWidth={4}
-            beamHeight={30}
-            beamNumber={8}
-            lightColor="#ff0000"
-            speed={2}
-            noiseIntensity={1.75}
-            scale={0.2}
-            rotation={30}
-          />
-        </div>
-      )}
-      
-      {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center">
+    <div className="relative">
+      <div className="relative min-h-screen flex items-center justify-center">
         <EmblaCarousel 
           slides={carouselSlides} 
           options={{ 
@@ -86,6 +51,14 @@ export default function Home() {
             dragFree: false
           }}
         />
+      </div>
+
+      {/* Blank Section */}
+      <div className="relative min-h-screen bg-transparent flex items-center justify-center">
+        <div className="text-white text-center">
+          <h2 className="text-4xl font-bold mb-4">New Section</h2>
+          <p className="text-lg opacity-70">This is a blank section below the landing page</p>
+        </div>
       </div>
 
     </div>
