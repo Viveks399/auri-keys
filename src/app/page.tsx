@@ -11,6 +11,14 @@ const EmblaCarousel = dynamic(() => import('@/components/EmblaCarousel'), {
   )
 });
 
+const SecondaryEmblaCarousel = dynamic(() => import('@/components/SecondaryEmblaCarousel'), {
+  loading: () => (
+    <div className="flex items-center justify-center py-8">
+      <div className="text-white text-lg">Loading carousel...</div>
+    </div>
+  )
+});
+
 // Custom Dropdown Component with smooth animations
 const AnimatedDropdown = ({ options, selectedValue, onSelect }: {
   options: string[];
@@ -108,6 +116,63 @@ export default function Home() {
     }
   ];
 
+  const secondaryCarouselSlides = [
+    {
+      src: '/assets/images/auri-keys.jpeg',
+      alt: 'Address Grand Downtown',
+      title: 'Address Grand Downtown',
+      location: 'Downtown',
+      deliveryDate: 'Dec, 2028',
+      price: 'AED 10,860,000',
+      developer: 'NSHAMA x EMAAR'
+    },
+    {
+      src: '/assets/images/auri-keys-2.jpg',
+      alt: 'Marina Heights Tower', 
+      title: 'Marina Heights Tower',
+      location: 'Dubai Marina',
+      deliveryDate: 'Q2, 2027',
+      price: 'AED 8,500,000',
+      developer: 'DAMAC Properties'
+    },
+    {
+      src: '/assets/images/auri-bg.jpg',
+      alt: 'Burj Vista',
+      title: 'Burj Vista',
+      location: 'Downtown',
+      deliveryDate: 'Mar, 2029',
+      price: 'AED 12,200,000',
+      developer: 'EMAAR Properties'
+    },
+    {
+      src: '/assets/images/mobile-bg.jpg',
+      alt: 'Dubai Hills Estate',
+      title: 'Dubai Hills Estate',
+      location: 'Dubai Hills',
+      deliveryDate: 'Jun, 2027',
+      price: 'AED 6,800,000',
+      developer: 'EMAAR Properties'
+    },
+    {
+      src: '/assets/images/auri-keys.jpeg',
+      alt: 'Business Bay Residences',
+      title: 'Business Bay Residences',
+      location: 'Business Bay',
+      deliveryDate: 'Sep, 2028',
+      price: 'AED 9,750,000',
+      developer: 'SOBHA Realty'
+    },
+    {
+      src: '/assets/images/auri-keys-2.jpg',
+      alt: 'Jumeirah Beach Residence',
+      title: 'Jumeirah Beach Residence',
+      location: 'JBR',
+      deliveryDate: 'Dec, 2027',
+      price: 'AED 7,300,000',
+      developer: 'Dubai Properties'
+    }
+  ];
+
   return (
     <div className="relative">
       <div className="relative min-h-screen flex items-center justify-center">
@@ -181,12 +246,22 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Blank Section */}
-      <div className="relative min-h-screen bg-transparent flex items-center justify-center -mt-16">
-        <div className="text-white text-center">
-          <h2 className="text-4xl font-bold mb-4">New Section</h2>
-          <p className="text-lg opacity-70">This is a blank section below the landing page</p>
+      {/* Secondary Carousel Section */}
+      <div className="relative min-h-screen bg-gradient-to-br from-slate-900/40 to-gray-900/40 flex flex-col items-center justify-center -mt-16">
+        <div className="text-white text-center mb-8">
+          <h2 className="text-4xl font-bold mb-4 font-display">Featured Properties</h2>
+          <p className="text-lg opacity-70">Discover our exclusive collection of premium real estate</p>
         </div>
+        <SecondaryEmblaCarousel 
+          slides={secondaryCarouselSlides} 
+          options={{ 
+            loop: true,
+            align: 'start',
+            skipSnaps: false,
+            dragFree: false,
+            containScroll: 'trimSnaps'
+          }}
+        />
       </div>
 
       {/* Dummy Section 1 */}
