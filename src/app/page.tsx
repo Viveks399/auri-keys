@@ -123,7 +123,7 @@ export default function Home() {
       </div>
 
       {/* Fixed Search Section - Positioned at bottom of carousel, overlapping next section */}
-      <div className="relative z-50 -mt-12 mb-32">
+      <div className="relative z-50 -mt-12">
         <div className="w-full max-w-4xl mx-auto">
           <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-6 shadow-2xl">
             <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -182,7 +182,7 @@ export default function Home() {
       </div>
 
       {/* Blank Section */}
-      <div className="relative min-h-screen bg-transparent flex items-center justify-center">
+      <div className="relative min-h-screen bg-transparent flex items-center justify-center -mt-16">
         <div className="text-white text-center">
           <h2 className="text-4xl font-bold mb-4">New Section</h2>
           <p className="text-lg opacity-70">This is a blank section below the landing page</p>
