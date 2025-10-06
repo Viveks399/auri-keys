@@ -62,7 +62,7 @@ const MemoizedSlide = React.memo(({ slide, index, selectedIndex }: {
                    opacity: selectedIndex === index ? 1 : 0,
                    transitionDelay: '0ms'
                  }}>
-              <span className="text-xs sm:text-sm md:text-base font-medium tracking-wider uppercase text-white/80">
+              <span className="text-xs sm:text-xs md:text-sm font-medium tracking-wider uppercase text-white/80">
                 {slide.subtitle}
               </span>
             </div>
@@ -70,7 +70,7 @@ const MemoizedSlide = React.memo(({ slide, index, selectedIndex }: {
           
           {/* Main Title */}
           {slide.title && (
-            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight transform translate-y-8 opacity-0 transition-all duration-1000 ease-out"
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight transform translate-y-8 opacity-0 transition-all duration-1000 ease-out"
                 style={{
                   transform: selectedIndex === index ? 'translateY(0)' : 'translateY(8px)',
                   opacity: selectedIndex === index ? 1 : 0,
@@ -82,7 +82,7 @@ const MemoizedSlide = React.memo(({ slide, index, selectedIndex }: {
           
           {/* Description */}
           {slide.description && (
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl max-w-xs sm:max-w-lg md:max-w-2xl mb-4 sm:mb-6 md:mb-8 leading-relaxed transform translate-y-8 opacity-0 transition-all duration-1000 ease-out"
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg max-w-xs sm:max-w-lg md:max-w-2xl mb-4 sm:mb-6 md:mb-8 leading-relaxed transform translate-y-8 opacity-0 transition-all duration-1000 ease-out"
                style={{
                  transform: selectedIndex === index ? 'translateY(0)' : 'translateY(8px)',
                  opacity: selectedIndex === index ? 0.9 : 0,
@@ -102,7 +102,7 @@ const MemoizedSlide = React.memo(({ slide, index, selectedIndex }: {
                  }}>
               {slide.features.map((feature, featureIndex) => (
                 <span key={featureIndex}
-                      className="px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 bg-white/10 backdrop-blur-sm rounded-full text-xs sm:text-sm md:text-base border border-white/20">
+                      className="px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 bg-white/10 backdrop-blur-sm rounded-full text-xs sm:text-xs md:text-sm border border-white/20">
                   {feature}
                 </span>
               ))}
