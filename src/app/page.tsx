@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="relative">
       <HeroSection />
-      <CarouselSection />
+      {/* <CarouselSection /> */}
       <PropertiesSection />
       <ServicesSection />
       <AboutSection />

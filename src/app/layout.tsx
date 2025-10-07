@@ -21,14 +21,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} antialiased`}
-      >
+      <head>
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={`${geistSans.variable} antialiased`}>
         <Header />
         <div className="relative">
-          <main className="main-content">
-            {children}
-          </main>
+          <main className="main-content">{children}</main>
           <Footer />
         </div>
       </body>
