@@ -94,7 +94,6 @@ main .min-h-screen {
   object-fit: cover;
 }
 
-
 .embla__buttons {
   position: absolute;
   top: 50%;
@@ -155,7 +154,6 @@ main .min-h-screen {
   height: 35%;
 }
 
-
 /* Dot Button Styles */
 .embla__dots {
   display: flex;
@@ -194,7 +192,7 @@ main .min-h-screen {
   border-radius: 50%;
   display: flex;
   align-items: center;
-  content: '';
+  content: "";
 }
 
 .embla__dot--selected:after {
@@ -241,7 +239,8 @@ main .min-h-screen {
   background: white;
   border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -396,12 +395,12 @@ main .min-h-screen {
     width: 2.5rem;
     height: 2.5rem;
   }
-  
+
   .embla--secondary {
     --slide-size: 50%;
     padding: 1rem 0;
   }
-  
+
   .embla--secondary .embla__viewport {
     max-width: 100%;
     padding: 0 1rem;
