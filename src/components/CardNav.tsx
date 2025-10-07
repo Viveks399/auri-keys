@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
+import React, { useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 
 type CardNavLink = {
   label: string;
@@ -30,14 +30,14 @@ export interface CardNavProps {
 
 const CardNav: React.FC<CardNavProps> = ({
   logo,
-  logoAlt = 'Logo',
+  logoAlt = "Logo",
   items,
-  className = '',
-  ease = 'power3.out',
-  baseColor = '#fff',
+  className = "",
+  ease = "power3.out",
+  baseColor = "#fff",
   menuColor,
   buttonBgColor,
-  buttonTextColor
+  buttonTextColor,
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -52,19 +52,19 @@ const CardNav: React.FC<CardNavProps> = ({
     const navEl = navRef.current;
     if (!navEl) return 260;
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     if (isMobile) {
-      const contentEl = navEl.querySelector('.card-nav-content') as HTMLElement;
+      const contentEl = navEl.querySelector(".card-nav-content") as HTMLElement;
       if (contentEl) {
         const wasVisible = contentEl.style.visibility;
         const wasPointerEvents = contentEl.style.pointerEvents;
         const wasPosition = contentEl.style.position;
         const wasHeight = contentEl.style.height;
 
-        contentEl.style.visibility = 'visible';
-        contentEl.style.pointerEvents = 'auto';
-        contentEl.style.position = 'static';
-        contentEl.style.height = 'auto';
+        contentEl.style.visibility = "visible";
+        contentEl.style.pointerEvents = "auto";
+        contentEl.style.position = "static";
+        contentEl.style.height = "auto";
 
         contentEl.offsetHeight;
 
@@ -87,7 +87,7 @@ const CardNav: React.FC<CardNavProps> = ({
     const navEl = navRef.current;
     if (!navEl) return null;
 
-    gsap.set(navEl, { height: 60, overflow: 'hidden' });
+    gsap.set(navEl, { height: 60, overflow: "hidden" });
     gsap.set(cardsRef.current, { y: 50, opacity: 0 });
 
     const tl = gsap.timeline({ paused: true });
@@ -95,10 +95,14 @@ const CardNav: React.FC<CardNavProps> = ({
     tl.to(navEl, {
       height: calculateHeight,
       duration: 0.4,
-      ease
+      ease,
     });
 
-    tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
+    tl.to(
+      cardsRef.current,
+      { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 },
+      "-=0.1"
+    );
 
     return tl;
   };
@@ -136,8 +140,8 @@ const CardNav: React.FC<CardNavProps> = ({
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [isExpanded]);
 
   const toggleMenu = () => {
@@ -149,7 +153,7 @@ const CardNav: React.FC<CardNavProps> = ({
       tl.play(0);
     } else {
       setIsHamburgerOpen(false);
-      tl.eventCallback('onReverseComplete', () => setIsExpanded(false));
+      tl.eventCallback("onReverseComplete", () => setIsExpanded(false));
       tl.reverse();
     }
   };
@@ -157,7 +161,7 @@ const CardNav: React.FC<CardNavProps> = ({
   const toggleTheme = () => {
     const currentIcon = isDarkMode ? moonIconRef.current : sunIconRef.current;
     const nextIcon = isDarkMode ? sunIconRef.current : moonIconRef.current;
-    
+
     if (currentIcon && nextIcon) {
       // Animate current icon rotation and fade out
       gsap.to(currentIcon, {
@@ -168,11 +172,12 @@ const CardNav: React.FC<CardNavProps> = ({
         onComplete: () => {
           setIsDarkMode(!isDarkMode);
           // Animate next icon rotation and fade in
-          gsap.fromTo(nextIcon, 
+          gsap.fromTo(
+            nextIcon,
             { rotation: -360, opacity: 0 },
             { rotation: 0, opacity: 1, duration: 0.3, ease: "power2.inOut" }
           );
-        }
+        },
       });
     } else {
       setIsDarkMode(!isDarkMode);
@@ -189,50 +194,66 @@ const CardNav: React.FC<CardNavProps> = ({
     >
       <nav
         ref={navRef}
-        className={`card-nav ${isExpanded ? 'open' : ''} block h-[60px] p-0 rounded-4xl shadow-lg relative overflow-hidden will-change-[height] bg-white/10 backdrop-blur-sm`}
+        className={`card-nav ${
+          isExpanded ? "open" : ""
+        } block h-[60px] p-0 rounded-4xl shadow-lg relative overflow-hidden will-change-[height] bg-white/10 backdrop-blur-sm`}
       >
         <div className="card-nav-top absolute inset-x-0 top-0 h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
           <div
-            className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''} group h-full flex flex-col items-center justify-center cursor-pointer gap-[6px] order-2 md:order-none`}
+            className={`hamburger-menu ${
+              isHamburgerOpen ? "open" : ""
+            } group h-full flex flex-col items-center justify-center cursor-pointer gap-[6px] order-2 md:order-none`}
             onClick={toggleMenu}
             role="button"
-            aria-label={isExpanded ? 'Close menu' : 'Open menu'}
+            aria-label={isExpanded ? "Close menu" : "Open menu"}
             tabIndex={0}
-            style={{ color: menuColor || '#000' }}
+            style={{ color: menuColor || "#000" }}
           >
             <div
               className={`hamburger-line w-[30px] h-[2px] bg-current transition-[transform,opacity,margin] duration-300 ease-linear [transform-origin:50%_50%] ${
-                isHamburgerOpen ? 'translate-y-[4px] rotate-45' : ''
+                isHamburgerOpen ? "translate-y-[4px] rotate-45" : ""
               } group-hover:opacity-75`}
             />
             <div
               className={`hamburger-line w-[30px] h-[2px] bg-current transition-[transform,opacity,margin] duration-300 ease-linear [transform-origin:50%_50%] ${
-                isHamburgerOpen ? '-translate-y-[4px] -rotate-45' : ''
+                isHamburgerOpen ? "-translate-y-[4px] -rotate-45" : ""
               } group-hover:opacity-75`}
             />
           </div>
 
           <div className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
-            <span className="text-xl font-display font-semibold text-gray-200">{logoAlt}</span>
+            <span className="text-xl font-display font-semibold text-zinc-900">
+              {logoAlt}
+            </span>
           </div>
 
           <button
             onClick={toggleTheme}
             className="theme-toggle hidden md:flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 hover:border-gray-400 transition-colors relative"
-            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label={
+              isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+            }
           >
-            <svg 
+            <svg
               ref={sunIconRef}
-              className={`w-4 h-4 text-yellow-500 absolute ${isDarkMode ? 'opacity-0' : 'opacity-100'}`} 
-              fill="currentColor" 
+              className={`w-4 h-4 text-yellow-500 absolute ${
+                isDarkMode ? "opacity-0" : "opacity-100"
+              }`}
+              fill="currentColor"
               viewBox="0 0 20 20"
             >
-              <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                clipRule="evenodd"
+              />
             </svg>
-            <svg 
+            <svg
               ref={moonIconRef}
-              className={`w-4 h-4 text-gray-600 absolute ${isDarkMode ? 'opacity-100' : 'opacity-0'}`} 
-              fill="currentColor" 
+              className={`w-4 h-4 text-gray-600 absolute ${
+                isDarkMode ? "opacity-100" : "opacity-0"
+              }`}
+              fill="currentColor"
               viewBox="0 0 20 20"
             >
               <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
@@ -242,7 +263,9 @@ const CardNav: React.FC<CardNavProps> = ({
 
         <div
           className={`card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-2 flex flex-col items-stretch gap-2 justify-start z-[1] ${
-            isExpanded ? 'visible pointer-events-auto' : 'invisible pointer-events-none'
+            isExpanded
+              ? "visible pointer-events-auto"
+              : "invisible pointer-events-none"
           } md:flex-row md:items-end md:gap-[12px]`}
           aria-hidden={!isExpanded}
         >
@@ -264,8 +287,19 @@ const CardNav: React.FC<CardNavProps> = ({
                     href={lnk.href}
                     aria-label={lnk.ariaLabel}
                   >
-                    <svg className="nav-card-link-icon shrink-0 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7V17" />
+                    <svg
+                      className="nav-card-link-icon shrink-0 w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M7 17L17 7M17 7H7M17 7V17"
+                      />
                     </svg>
                     {lnk.label}
                   </a>
