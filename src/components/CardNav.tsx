@@ -29,15 +29,11 @@ export interface CardNavProps {
 }
 
 const CardNav: React.FC<CardNavProps> = ({
-  logo,
   logoAlt = "Logo",
   items,
   className = "",
   ease = "power3.out",
-  baseColor = "#fff",
   menuColor,
-  buttonBgColor,
-  buttonTextColor,
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -66,7 +62,7 @@ const CardNav: React.FC<CardNavProps> = ({
         contentEl.style.position = "static";
         contentEl.style.height = "auto";
 
-        contentEl.offsetHeight;
+        void contentEl.offsetHeight; // Force reflow
 
         const topBar = 60;
         const padding = 16;

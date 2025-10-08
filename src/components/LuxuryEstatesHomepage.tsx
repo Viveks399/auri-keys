@@ -30,7 +30,8 @@ const LuxuryEstatesHomepage: React.FC = () => {
             in Dubai
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-background-dark/70 dark:text-background-light/70">
-            Discover a curated selection of Dubai's most exclusive properties.
+            Discover a curated selection of Dubai&apos;s most exclusive
+            properties.
           </p>
         </div>
 

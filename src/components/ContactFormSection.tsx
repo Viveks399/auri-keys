@@ -126,7 +126,7 @@ const ContactFormSection: React.FC = () => {
           </div>
 
           {/* Form Grid Layout */}
-          <div className="bg-white dark:bg-background-dark rounded-2xl shadow-xl p-8 md:p-12">
+          <div className="bg-white dark:bg-background-dark rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 p-8 md:p-12">
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Top Row - Full Name and Email */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -275,7 +275,7 @@ const ContactFormSection: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-primary text-zinc-900 font-bold py-3 px-8 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-[1.02] shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="inline-flex items-center justify-center bg-white border-2 border-black text-black font-semibold h-12 min-w-[140px] md:min-w-[170px] px-[17px] text-center text-base leading-6 tracking-tight outline-none select-none touch-manipulation transition-all duration-300 cursor-pointer active:scale-95 focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Details"}
                 </button>
