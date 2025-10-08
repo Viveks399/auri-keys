@@ -3,124 +3,170 @@ import React from "react";
 const Footer = () => {
   return (
     <footer
-      className="w-full dark:bg-background-dark font-display text-[#1C1917] dark:text-background-light sticky bottom-0 left-0 z-0"
+      className="w-full dark:bg-background-dark font-display text-[#1C1917] dark:text-background-light relative md:sticky md:bottom-0 left-0 z-0"
       style={{ backgroundColor: "#f8f7f6" }}
     >
       <div className="container mx-auto px-6 lg:px-8 py-16">
         <div className="relative pt-8">
           {/* Top border covering 70-80% width */}
           <div className="absolute -top-px left-1/2 transform -translate-x-1/2 w-4/4 h-px bg-zinc-200/50 dark:bg-zinc-800/50"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-            {/* About Auri Keys */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-1">
-              <h3 className="text-lg font-bold text-zinc-900 mb-6">
-                About Auri Keys
-              </h3>
-              <p className="text-sm leading-relaxed mb-4 text-zinc-600 dark:text-zinc-400">
-                Auri Keys helps you find your dream home in Dubai&apos;s most
-                prestigious communities.
-              </p>
-              <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                123 Luxury Lane,
-                <br />
-                Downtown Dubai, UAE
-              </p>
+          <div className="flex flex-col gap-12">
+            {/* Main 4 sections */}
+            <div className="flex flex-col md:flex-row lg:grid lg:grid-cols-4 gap-12">
+              {/* About Auri Keys */}
+              <div className="flex-1 lg:col-span-1">
+                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                  About Auri Keys
+                </h3>
+                <p className="text-sm leading-relaxed mb-4 text-zinc-600 dark:text-zinc-400">
+                  Auri Keys helps you find your dream home in Dubai&apos;s most
+                  prestigious communities.
+                </p>
+                <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  123 Luxury Lane,
+                  <br />
+                  Downtown Dubai, UAE
+                </p>
+              </div>
+
+              {/* Quick Links */}
+              <div className="flex-1 lg:col-span-1">
+                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                  Quick Links
+                </h3>
+                <nav className="space-y-3">
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Home
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Properties
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Communities
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Off-Plan
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    About Us
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Careers
+                  </a>
+                </nav>
+              </div>
+
+              {/* Resources */}
+              <div className="flex-1 lg:col-span-1">
+                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                  Resources
+                </h3>
+                <nav className="space-y-3">
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Blog
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Guides
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Mortgage Calculator
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    FAQs
+                  </a>
+                  <a
+                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    href="#"
+                  >
+                    Market Reports
+                  </a>
+                </nav>
+              </div>
+
+              {/* Concierge Service Hub */}
+              <div className="flex-1 lg:col-span-1">
+                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                  Concierge Service Hub
+                </h3>
+                <p className="text-sm leading-relaxed mb-4 text-zinc-600 dark:text-zinc-400">
+                  Experience unparalleled personal assistance for your luxury
+                  real estate needs. Connect with us directly.
+                </p>
+                {/* Desktop layout - buttons and links inside this section */}
+                <div className="hidden lg:block">
+                  <div className="space-y-4">
+                    <button className="w-full bg-primary text-zinc-900 font-bold py-3 px-6 rounded-lg text-sm hover:opacity-90 transition-opacity flex items-center justify-center">
+                      <span className="material-symbols-outlined mr-2">
+                        chat
+                      </span>
+                      Direct Chat
+                    </button>
+                    <button className="w-full bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 font-bold py-3 px-6 rounded-lg text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center justify-center">
+                      <span className="material-symbols-outlined mr-2">
+                        phone_in_talk
+                      </span>
+                      Request a Callback
+                    </button>
+                  </div>
+                  <div className="mt-8">
+                    <nav className="space-y-2">
+                      <a
+                        className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                        href="#"
+                      >
+                        Terms & Conditions
+                      </a>
+                      <a
+                        className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                        href="#"
+                      >
+                        Privacy Policy
+                      </a>
+                      <a
+                        className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                        href="#"
+                      >
+                        Cookie Policy
+                      </a>
+                    </nav>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-lg font-bold text-zinc-900 mb-6">
-                Quick Links
-              </h3>
-              <nav className="space-y-3">
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Home
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Properties
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Communities
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Off-Plan
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  About Us
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Careers
-                </a>
-              </nav>
-            </div>
-
-            {/* Resources */}
-            <div>
-              <h3 className="text-lg font-bold text-zinc-900 mb-6">
-                Resources
-              </h3>
-              <nav className="space-y-3">
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Blog
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Guides
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Mortgage Calculator
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  FAQs
-                </a>
-                <a
-                  className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  href="#"
-                >
-                  Market Reports
-                </a>
-              </nav>
-            </div>
-
-            {/* Concierge Service Hub */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-1">
-              <h3 className="text-lg font-bold text-zinc-900 mb-6">
-                Concierge Service Hub
-              </h3>
-              <p className="text-sm leading-relaxed mb-4 text-zinc-600 dark:text-zinc-400">
-                Experience unparalleled personal assistance for your luxury real
-                estate needs. Connect with us directly.
-              </p>
-              <div className="space-y-4">
+            {/* Buttons and Policy Links - Below the 4 sections for tablet */}
+            <div className="flex flex-col md:flex-row md:justify-between lg:hidden space-y-4 md:space-y-0">
+              <div className="flex flex-col space-y-4 md:w-1/3">
                 <button className="w-full bg-primary text-zinc-900 font-bold py-3 px-6 rounded-lg text-sm hover:opacity-90 transition-opacity flex items-center justify-center">
                   <span className="material-symbols-outlined mr-2">chat</span>
                   Direct Chat
@@ -132,7 +178,7 @@ const Footer = () => {
                   Request a Callback
                 </button>
               </div>
-              <div className="mt-8">
+              <div className="flex flex-col md:w-1/3 md:items-start">
                 <nav className="space-y-2">
                   <a
                     className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"

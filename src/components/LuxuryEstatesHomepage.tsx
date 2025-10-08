@@ -6,7 +6,7 @@ import RotatingText from "@/components/RotatingText";
 const LuxuryEstatesHomepage: React.FC = () => {
   return (
     <div
-      className="dark:bg-background-dark font-display text-[#1C1917] dark:text-background-light h-screen relative z-10"
+      className="dark:bg-background-dark font-display text-[#1C1917] dark:text-background-light md:h-screen relative z-10"
       style={{ backgroundColor: "#f8f7f6" }}
     >
       <main className="flex-grow flex flex-col h-full">
@@ -36,10 +36,10 @@ const LuxuryEstatesHomepage: React.FC = () => {
 
         {/* Services Grid */}
         <div className="px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 lg:pb-16 flex-grow flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8 w-full">
             {/* Buy Section */}
             <a
-              className="group relative block overflow-hidden rounded-xl h-120 shadow-lg"
+              className="group relative block overflow-hidden rounded-xl h-60 md:h-120 shadow-lg"
               href="#"
             >
               <div
@@ -70,7 +70,7 @@ const LuxuryEstatesHomepage: React.FC = () => {
 
             {/* Rent Section */}
             <a
-              className="group relative block overflow-hidden rounded-xl h-120 shadow-lg"
+              className="group relative block overflow-hidden rounded-xl h-60 md:h-120 shadow-lg"
               href="#"
             >
               <div
@@ -101,7 +101,7 @@ const LuxuryEstatesHomepage: React.FC = () => {
 
             {/* Off-Plan Section */}
             <a
-              className="group relative block overflow-hidden rounded-xl h-120 shadow-lg"
+              className="group relative block overflow-hidden rounded-xl h-60 md:h-120 shadow-lg"
               href="#"
             >
               <div
