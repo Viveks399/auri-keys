@@ -1,0 +1,415 @@
+{
+  "info": {
+    "name": "Auri Keys Property API",
+    "description": "Complete API collection for Property Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Admin Signup",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const responseData = pm.response.json();",
+                  "    pm.environment.set(\"admin_token\", responseData.token);",
+                  "    pm.environment.set(\"admin_email\", responseData.admin.email);",
+                  "    console.log(\"Token saved:\", responseData.token);",
+                  "    console.log(\"Admin email:\", responseData.admin.email);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Admin\",\n  \"email\": \"admin@test.com\",\n  \"password\": \"test123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/signup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "signup"]
+            },
+            "description": "Create a new admin account. Token is automatically saved to environment variable."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const responseData = pm.response.json();",
+                  "    pm.environment.set(\"admin_token\", responseData.token);",
+                  "    pm.environment.set(\"admin_email\", responseData.admin.email);",
+                  "    console.log(\"Token saved:\", responseData.token);",
+                  "    console.log(\"Admin email:\", responseData.admin.email);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@test.com\",\n  \"password\": \"test123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login with admin credentials. Token is automatically saved to environment variable."
+          },
+          "response": []
+        }
+      ],
+      "description": "Admin authentication endpoints - signup and login"
+    },
+    {
+      "name": "Properties",
+      "item": [
+        {
+          "name": "Get All Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"]
+            },
+            "description": "Retrieve all properties from the database (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Properties (With Filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties?city=Miami&minPrice=1000000&status=available",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "Miami",
+                  "description": "Filter by city name"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000000",
+                  "description": "Minimum price"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "",
+                  "description": "Maximum price",
+                  "disabled": true
+                },
+                {
+                  "key": "propertyType",
+                  "value": "",
+                  "description": "house, apartment, condo, townhouse, villa, land, commercial",
+                  "disabled": true
+                },
+                {
+                  "key": "minBedrooms",
+                  "value": "",
+                  "description": "Minimum number of bedrooms",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "available",
+                  "description": "available, pending, sold"
+                }
+              ]
+            },
+            "description": "Get properties with filters applied (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Property by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/{{property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "{{property_id}}"]
+            },
+            "description": "Get a single property by its ID (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Property",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const responseData = pm.response.json();",
+                  "    pm.environment.set(\"property_id\", responseData.data.id);",
+                  "    console.log(\"Property ID saved:\", responseData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Modern Downtown Loft\",\n  \"description\": \"Spacious loft with industrial charm and modern amenities in the heart of downtown\",\n  \"price\": 750000,\n  \"location\": {\n    \"address\": \"555 Main Street, Unit 302\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"zipCode\": \"97205\",\n    \"country\": \"USA\"\n  },\n  \"features\": {\n    \"bedrooms\": 2,\n    \"bathrooms\": 2,\n    \"squareFeet\": 1800,\n    \"yearBuilt\": 2021\n  },\n  \"amenities\": [\"Exposed Brick\", \"High Ceilings\", \"Parking\", \"Gym Access\"],\n  \"images\": [\"/path/to/image1.jpg\", \"/path/to/image2.jpg\"],\n  \"propertyType\": \"apartment\",\n  \"status\": \"available\",\n  \"featured\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"]
+            },
+            "description": "Create a new property listing (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Luxury Villa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const responseData = pm.response.json();",
+                  "    pm.environment.set(\"property_id\", responseData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Ocean View Luxury Villa\",\n  \"description\": \"Stunning villa with panoramic ocean views and private beach access\",\n  \"price\": 3500000,\n  \"location\": {\n    \"address\": \"789 Coastal Highway\",\n    \"city\": \"Malibu\",\n    \"state\": \"CA\",\n    \"zipCode\": \"90265\",\n    \"country\": \"USA\"\n  },\n  \"features\": {\n    \"bedrooms\": 6,\n    \"bathrooms\": 5,\n    \"squareFeet\": 6000,\n    \"lotSize\": 15000,\n    \"yearBuilt\": 2022\n  },\n  \"amenities\": [\"Infinity Pool\", \"Home Theater\", \"Wine Cellar\", \"Beach Access\", \"Smart Home\", \"Guest House\"],\n  \"images\": [],\n  \"propertyType\": \"villa\",\n  \"status\": \"available\",\n  \"featured\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"]
+            },
+            "description": "Create a luxury villa property (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Property (Partial)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 725000,\n  \"status\": \"pending\",\n  \"features\": {\n    \"squareFeet\": 1850\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties/{{property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "{{property_id}}"]
+            },
+            "description": "Update specific fields of a property (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Property (Full)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Modern Downtown Loft - Renovated\",\n  \"description\": \"Spacious loft with industrial charm, recently renovated with high-end finishes\",\n  \"price\": 775000,\n  \"location\": {\n    \"address\": \"555 Main Street, Unit 302\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"zipCode\": \"97205\",\n    \"country\": \"USA\"\n  },\n  \"features\": {\n    \"bedrooms\": 2,\n    \"bathrooms\": 2,\n    \"squareFeet\": 1900,\n    \"yearBuilt\": 2021\n  },\n  \"amenities\": [\"Exposed Brick\", \"High Ceilings\", \"Parking\", \"Gym Access\", \"Rooftop Deck\"],\n  \"images\": [\"/path/to/image1.jpg\", \"/path/to/image2.jpg\", \"/path/to/image3.jpg\"],\n  \"propertyType\": \"apartment\",\n  \"status\": \"available\",\n  \"featured\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties/{{property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "{{property_id}}"]
+            },
+            "description": "Update a property with complete data (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Property",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/{{property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "{{property_id}}"]
+            },
+            "description": "Delete a property by ID (requires authentication)"
+          },
+          "response": []
+        }
+      ],
+      "description": "All property management endpoints"
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "property_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
