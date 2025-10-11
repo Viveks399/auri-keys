@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Manrope } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import ConditionalLayout from "@/components/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,11 +37,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${manrope.variable} antialiased`}>
-        <Header />
-        <div className="relative">
-          <main className="main-content">{children}</main>
-          <Footer />
-        </div>
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );

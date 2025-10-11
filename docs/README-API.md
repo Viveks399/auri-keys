@@ -251,6 +251,85 @@ DELETE /api/properties/1
 
 ---
 
+### 6. Upload Property Images
+
+**POST** `/api/upload/images`
+
+Upload single or multiple images to Cloudinary for property listings.
+
+**Authentication:** Required (Bearer token)
+
+**Request Body (Single Image):**
+
+```json
+{
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRg...",
+  "folder": "properties"
+}
+```
+
+**Request Body (Multiple Images):**
+
+```json
+{
+  "images": [
+    "data:image/jpeg;base64,/9j/4AAQSkZJRg...",
+    "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+  ],
+  "folder": "properties"
+}
+```
+
+**Response (200):**
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://res.cloudinary.com/.../image.jpg",
+    "publicId": "properties/image123"
+  },
+  "message": "Image uploaded successfully"
+}
+```
+
+---
+
+### 7. Delete Property Images
+
+**DELETE** `/api/upload/images/delete`
+
+Delete images from Cloudinary.
+
+**Authentication:** Required (Bearer token)
+
+**Request Body (By Public ID):**
+
+```json
+{
+  "publicId": "properties/image123"
+}
+```
+
+**Request Body (By URL):**
+
+```json
+{
+  "url": "https://res.cloudinary.com/.../image.jpg"
+}
+```
+
+**Response (200):**
+
+```json
+{
+  "success": true,
+  "message": "Image deleted successfully"
+}
+```
+
+---
+
 ## Using the API from Frontend
 
 You can use the utility functions provided in `src/lib/api-utils.ts`:
@@ -408,11 +487,29 @@ All endpoints follow a consistent error response format:
 
 ---
 
+---
+
+## Image Upload
+
+For detailed image upload documentation, see [CLOUDINARY-IMAGE-UPLOAD.md](CLOUDINARY-IMAGE-UPLOAD.md).
+
+**Quick Example:**
+
+```bash
+# Upload image
+curl -X POST http://localhost:3000/api/upload/images \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"image":"data:image/jpeg;base64,...","folder":"properties"}'
+```
+
+---
+
 ## Next Steps
 
-1. **Add Authentication:** Protect endpoints with JWT or session-based auth
-2. **Add Database:** Replace in-memory store with a real database
-3. **Add Image Upload:** Implement file upload for property images
+1. ✅ **Add Authentication:** JWT-based authentication implemented
+2. ✅ **Add Database:** MongoDB with Mongoose integration
+3. ✅ **Add Image Upload:** Cloudinary integration for property images
 4. **Add Pagination:** Implement pagination for large property lists
 5. **Add Validation:** Use a validation library like Zod or Yup
 6. **Add Rate Limiting:** Protect API from abuse

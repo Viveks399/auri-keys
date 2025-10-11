@@ -20,6 +20,106 @@ const PropertySchema = new Schema<Property>(
       required: [true, "Price is required"],
       min: [0, "Price must be a positive number"],
     },
+    transactionType: {
+      type: String,
+      required: [true, "Transaction type is required"],
+      enum: {
+        values: ["buy", "rent"],
+        message: "{VALUE} is not a valid transaction type",
+      },
+    },
+    propertyType: {
+      type: String,
+      required: [true, "Property type is required"],
+      enum: {
+        values: [
+          "house",
+          "apartment",
+          "penthouse",
+          "plot",
+          "villa",
+          "land",
+          "townhouse",
+          "duplex",
+        ],
+        message: "{VALUE} is not a valid property type",
+      },
+    },
+    beds: {
+      type: Number,
+      required: [true, "Number of beds is required"],
+      min: [0, "Beds must be a positive number"],
+    },
+    baths: {
+      type: Number,
+      required: [true, "Number of baths is required"],
+      min: [0, "Baths must be a positive number"],
+    },
+    size: {
+      type: Number,
+      required: [true, "Size in sq.ft is required"],
+      min: [0, "Size must be a positive number"],
+    },
+    furnishingStatus: {
+      type: String,
+      required: [true, "Furnishing status is required"],
+      enum: {
+        values: ["furnished", "semi-furnished", "non-furnished"],
+        message: "{VALUE} is not a valid furnishing status",
+      },
+    },
+    propertyFeatures: {
+      type: [String],
+      default: [],
+      validate: {
+        validator: function (features: string[]) {
+          const validFeatures = [
+            "Private Pool",
+            "Upgraded",
+            "Large Plot",
+            "Close to Park",
+            "Brand New",
+            "Vacant on Transfer",
+            "Waterviews",
+            "Golf Course View",
+            "Balcony",
+            "Garden",
+            "Maid Room",
+            "Beach Access",
+            "Gym",
+          ];
+          return features.every((feature) => validFeatures.includes(feature));
+        },
+        message: "Invalid property feature",
+      },
+    },
+    seller: {
+      name: {
+        type: String,
+        required: [true, "Seller name is required"],
+        trim: true,
+      },
+      job: {
+        type: String,
+        required: [true, "Seller job is required"],
+        trim: true,
+      },
+      phone: {
+        type: String,
+        required: [true, "Seller phone is required"],
+        trim: true,
+      },
+      email: {
+        type: String,
+        required: [true, "Seller email is required"],
+        trim: true,
+        lowercase: true,
+        match: [
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+          "Please provide a valid email address",
+        ],
+      },
+    },
     location: {
       address: {
         type: String,
@@ -42,35 +142,6 @@ const PropertySchema = new Schema<Property>(
         required: [true, "Country is required"],
       },
     },
-    features: {
-      bedrooms: {
-        type: Number,
-        required: [true, "Number of bedrooms is required"],
-        min: [0, "Bedrooms must be a positive number"],
-      },
-      bathrooms: {
-        type: Number,
-        required: [true, "Number of bathrooms is required"],
-        min: [0, "Bathrooms must be a positive number"],
-      },
-      squareFeet: {
-        type: Number,
-        required: [true, "Square feet is required"],
-        min: [0, "Square feet must be a positive number"],
-      },
-      lotSize: {
-        type: Number,
-        min: [0, "Lot size must be a positive number"],
-      },
-      yearBuilt: {
-        type: Number,
-        min: [1800, "Year built must be valid"],
-        max: [
-          new Date().getFullYear() + 1,
-          "Year built cannot be in the future",
-        ],
-      },
-    },
     amenities: {
       type: [String],
       default: [],
@@ -78,22 +149,6 @@ const PropertySchema = new Schema<Property>(
     images: {
       type: [String],
       default: [],
-    },
-    propertyType: {
-      type: String,
-      required: [true, "Property type is required"],
-      enum: {
-        values: [
-          "house",
-          "apartment",
-          "condo",
-          "townhouse",
-          "villa",
-          "land",
-          "commercial",
-        ],
-        message: "{VALUE} is not a valid property type",
-      },
     },
     status: {
       type: String,
@@ -111,6 +166,15 @@ const PropertySchema = new Schema<Property>(
     featured: {
       type: Boolean,
       default: false,
+    },
+    yearBuilt: {
+      type: Number,
+      min: [1800, "Year built must be valid"],
+      max: [new Date().getFullYear() + 1, "Year built cannot be in the future"],
+    },
+    lotSize: {
+      type: Number,
+      min: [0, "Lot size must be a positive number"],
     },
   },
   {
@@ -130,8 +194,12 @@ const PropertySchema = new Schema<Property>(
 PropertySchema.index({ "location.city": 1 });
 PropertySchema.index({ price: 1 });
 PropertySchema.index({ propertyType: 1 });
+PropertySchema.index({ transactionType: 1 });
 PropertySchema.index({ status: 1 });
 PropertySchema.index({ featured: 1 });
+PropertySchema.index({ beds: 1 });
+PropertySchema.index({ baths: 1 });
+PropertySchema.index({ furnishingStatus: 1 });
 
 // Create the model or use existing one (important for Next.js hot reloading)
 const PropertyModel: Model<Property> =

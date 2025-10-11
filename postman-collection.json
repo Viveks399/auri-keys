@@ -161,7 +161,7 @@
                 {
                   "key": "propertyType",
                   "value": "",
-                  "description": "house, apartment, condo, townhouse, villa, land, commercial",
+                  "description": "house, apartment, penthouse, plot, villa, land, townhouse, duplex",
                   "disabled": true
                 },
                 {
@@ -234,7 +234,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Modern Downtown Loft\",\n  \"description\": \"Spacious loft with industrial charm and modern amenities in the heart of downtown\",\n  \"price\": 750000,\n  \"location\": {\n    \"address\": \"555 Main Street, Unit 302\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"zipCode\": \"97205\",\n    \"country\": \"USA\"\n  },\n  \"features\": {\n    \"bedrooms\": 2,\n    \"bathrooms\": 2,\n    \"squareFeet\": 1800,\n    \"yearBuilt\": 2021\n  },\n  \"amenities\": [\"Exposed Brick\", \"High Ceilings\", \"Parking\", \"Gym Access\"],\n  \"images\": [\"/path/to/image1.jpg\", \"/path/to/image2.jpg\"],\n  \"propertyType\": \"apartment\",\n  \"status\": \"available\",\n  \"featured\": false\n}",
+              "raw": "{\n  \"title\": \"Modern Downtown Loft\",\n  \"description\": \"Spacious loft with industrial charm and modern amenities in the heart of downtown\",\n  \"price\": 750000,\n  \"transactionType\": \"buy\",\n  \"propertyType\": \"apartment\",\n  \"beds\": 2,\n  \"baths\": 2,\n  \"size\": 1800,\n  \"furnishingStatus\": \"furnished\",\n  \"propertyFeatures\": [\"Balcony\", \"Gym\", \"Upgraded\"],\n  \"seller\": {\n    \"name\": \"John Smith\",\n    \"job\": \"Real Estate Agent\",\n    \"phone\": \"+1-555-123-4567\",\n    \"email\": \"john.smith@realestate.com\"\n  },\n  \"location\": {\n    \"address\": \"555 Main Street, Unit 302\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"zipCode\": \"97205\",\n    \"country\": \"USA\"\n  },\n  \"amenities\": [\"Exposed Brick\", \"High Ceilings\", \"Parking\", \"Gym Access\"],\n  \"images\": [],\n  \"yearBuilt\": 2021,\n  \"status\": \"available\",\n  \"featured\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -282,7 +282,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Ocean View Luxury Villa\",\n  \"description\": \"Stunning villa with panoramic ocean views and private beach access\",\n  \"price\": 3500000,\n  \"location\": {\n    \"address\": \"789 Coastal Highway\",\n    \"city\": \"Malibu\",\n    \"state\": \"CA\",\n    \"zipCode\": \"90265\",\n    \"country\": \"USA\"\n  },\n  \"features\": {\n    \"bedrooms\": 6,\n    \"bathrooms\": 5,\n    \"squareFeet\": 6000,\n    \"lotSize\": 15000,\n    \"yearBuilt\": 2022\n  },\n  \"amenities\": [\"Infinity Pool\", \"Home Theater\", \"Wine Cellar\", \"Beach Access\", \"Smart Home\", \"Guest House\"],\n  \"images\": [],\n  \"propertyType\": \"villa\",\n  \"status\": \"available\",\n  \"featured\": true\n}",
+              "raw": "{\n  \"title\": \"Ocean View Luxury Villa\",\n  \"description\": \"Stunning villa with panoramic ocean views and private beach access\",\n  \"price\": 3500000,\n  \"transactionType\": \"buy\",\n  \"propertyType\": \"villa\",\n  \"beds\": 6,\n  \"baths\": 5,\n  \"size\": 6000,\n  \"furnishingStatus\": \"furnished\",\n  \"propertyFeatures\": [\"Private Pool\", \"Beach Access\", \"Waterviews\", \"Gym\", \"Brand New\"],\n  \"seller\": {\n    \"name\": \"Sarah Johnson\",\n    \"job\": \"Luxury Property Specialist\",\n    \"phone\": \"+1-555-987-6543\",\n    \"email\": \"sarah.johnson@luxuryrealty.com\"\n  },\n  \"location\": {\n    \"address\": \"789 Coastal Highway\",\n    \"city\": \"Malibu\",\n    \"state\": \"CA\",\n    \"zipCode\": \"90265\",\n    \"country\": \"USA\"\n  },\n  \"amenities\": [\"Infinity Pool\", \"Home Theater\", \"Wine Cellar\", \"Beach Access\", \"Smart Home\", \"Guest House\"],\n  \"images\": [],\n  \"lotSize\": 15000,\n  \"yearBuilt\": 2022,\n  \"status\": \"available\",\n  \"featured\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -295,6 +295,68 @@
               "path": ["api", "properties"]
             },
             "description": "Create a luxury villa property (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Property with Images (Form Upload)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const responseData = pm.response.json();",
+                  "    pm.environment.set(\"property_id\", responseData.data.id);",
+                  "    console.log(\"✅ Property created with images!\");",
+                  "    console.log(\"Property ID:\", responseData.data.id);",
+                  "    console.log(\"Images uploaded:\", responseData.data.images.length);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "propertyData",
+                  "value": "{\\n  \\\"title\\\": \\\"Stunning Penthouse with City Views\\\",\\n  \\\"description\\\": \\\"Modern 3-bedroom penthouse with floor-to-ceiling windows and panoramic city views\\\",\\n  \\\"price\\\": 2800000,\\n  \\\"transactionType\\\": \\\"buy\\\",\\n  \\\"propertyType\\\": \\\"penthouse\\\",\\n  \\\"beds\\\": 3,\\n  \\\"baths\\\": 3,\\n  \\\"size\\\": 2500,\\n  \\\"furnishingStatus\\\": \\\"furnished\\\",\\n  \\\"propertyFeatures\\\": [\\\"Balcony\\\", \\\"Gym\\\", \\\"Upgraded\\\", \\\"Waterviews\\\"],\\n  \\\"seller\\\": {\\n    \\\"name\\\": \\\"Emily Chen\\\",\\n    \\\"job\\\": \\\"Property Specialist\\\",\\n    \\\"phone\\\": \\\"+1-555-444-3333\\\",\\n    \\\"email\\\": \\\"emily.chen@realestate.com\\\"\\n  },\\n  \\\"location\\\": {\\n    \\\"address\\\": \\\"100 Tower Boulevard, Penthouse Suite\\\",\\n    \\\"city\\\": \\\"New York\\\",\\n    \\\"state\\\": \\\"NY\\\",\\n    \\\"zipCode\\\": \\\"10001\\\",\\n    \\\"country\\\": \\\"USA\\\"\\n  },\\n  \\\"amenities\\\": [\\\"Concierge\\\", \\\"Rooftop Pool\\\", \\\"Valet Parking\\\", \\\"Smart Home\\\"],\\n  \\\"yearBuilt\\\": 2023,\\n  \\\"status\\\": \\\"available\\\",\\n  \\\"featured\\\": true\\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"]
+            },
+            "description": "Create a property and upload images in ONE REQUEST! Select image files in the 'images' fields. Property details are sent as JSON in the 'propertyData' field. Images are automatically uploaded to Cloudinary and URLs are saved to the property."
           },
           "response": []
         },
@@ -316,7 +378,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"price\": 725000,\n  \"status\": \"pending\",\n  \"features\": {\n    \"squareFeet\": 1850\n  }\n}",
+              "raw": "{\n  \"price\": 725000,\n  \"status\": \"pending\",\n  \"size\": 1850,\n  \"seller\": {\n    \"phone\": \"+1-555-123-9999\"\n  }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -350,7 +412,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Modern Downtown Loft - Renovated\",\n  \"description\": \"Spacious loft with industrial charm, recently renovated with high-end finishes\",\n  \"price\": 775000,\n  \"location\": {\n    \"address\": \"555 Main Street, Unit 302\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"zipCode\": \"97205\",\n    \"country\": \"USA\"\n  },\n  \"features\": {\n    \"bedrooms\": 2,\n    \"bathrooms\": 2,\n    \"squareFeet\": 1900,\n    \"yearBuilt\": 2021\n  },\n  \"amenities\": [\"Exposed Brick\", \"High Ceilings\", \"Parking\", \"Gym Access\", \"Rooftop Deck\"],\n  \"images\": [\"/path/to/image1.jpg\", \"/path/to/image2.jpg\", \"/path/to/image3.jpg\"],\n  \"propertyType\": \"apartment\",\n  \"status\": \"available\",\n  \"featured\": true\n}",
+              "raw": "{\n  \"title\": \"Modern Downtown Loft - Renovated\",\n  \"description\": \"Spacious loft with industrial charm, recently renovated with high-end finishes\",\n  \"price\": 775000,\n  \"transactionType\": \"buy\",\n  \"propertyType\": \"apartment\",\n  \"beds\": 2,\n  \"baths\": 2,\n  \"size\": 1900,\n  \"furnishingStatus\": \"semi-furnished\",\n  \"propertyFeatures\": [\"Balcony\", \"Gym\", \"Upgraded\"],\n  \"seller\": {\n    \"name\": \"John Smith\",\n    \"job\": \"Real Estate Agent\",\n    \"phone\": \"+1-555-123-4567\",\n    \"email\": \"john.smith@realestate.com\"\n  },\n  \"location\": {\n    \"address\": \"555 Main Street, Unit 302\",\n    \"city\": \"Portland\",\n    \"state\": \"OR\",\n    \"zipCode\": \"97205\",\n    \"country\": \"USA\"\n  },\n  \"amenities\": [\"Exposed Brick\", \"High Ceilings\", \"Parking\", \"Gym Access\", \"Rooftop Deck\"],\n  \"images\": [],\n  \"yearBuilt\": 2021,\n  \"status\": \"available\",\n  \"featured\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -388,6 +450,505 @@
         }
       ],
       "description": "All property management endpoints"
+    },
+    {
+      "name": "Image Upload",
+      "item": [
+        {
+          "name": "Upload Single Image",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const responseData = pm.response.json();",
+                  "    if (responseData.success && responseData.data.url) {",
+                  "        pm.environment.set(\"image_url_1\", responseData.data.url);",
+                  "        pm.environment.set(\"image_public_id_1\", responseData.data.publicId);",
+                  "        console.log(\"✅ Image URL saved:\", responseData.data.url);",
+                  "        console.log(\"✅ Public ID saved:\", responseData.data.publicId);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"image\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\",\n  \"folder\": \"properties\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images"]
+            },
+            "description": "Upload a single image to Cloudinary. Uses a 1x1 test image by default. Replace with your base64 encoded image. URL is automatically saved to environment variable 'image_url_1'."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Multiple Images",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const responseData = pm.response.json();",
+                  "    if (responseData.success && Array.isArray(responseData.data)) {",
+                  "        responseData.data.forEach((img, index) => {",
+                  "            pm.environment.set(`image_url_${index + 1}`, img.url);",
+                  "            pm.environment.set(`image_public_id_${index + 1}`, img.publicId);",
+                  "            console.log(`✅ Image ${index + 1} URL saved:`, img.url);",
+                  "        });",
+                  "        console.log(`✅ Total images uploaded: ${responseData.data.length}`);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"images\": [\n    \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\",\n    \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg==\",\n    \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==\"\n  ],\n  \"folder\": \"properties\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images"]
+            },
+            "description": "Upload multiple images (max 10) to Cloudinary. Uses 1x1 test images by default. Replace with your base64 encoded images. URLs are automatically saved to environment variables 'image_url_1', 'image_url_2', etc."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload File from Device (Single)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const responseData = pm.response.json();",
+                  "    if (responseData.success && responseData.data.url) {",
+                  "        pm.environment.set(\"image_url_1\", responseData.data.url);",
+                  "        pm.environment.set(\"image_public_id_1\", responseData.data.publicId);",
+                  "        console.log(\"✅ Image URL saved:\", responseData.data.url);",
+                  "        console.log(\"✅ Public ID saved:\", responseData.data.publicId);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "folder",
+                  "value": "properties",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images/file",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images", "file"]
+            },
+            "description": "Upload a single image file directly from your device. Click 'Select Files' in the file field to choose an image. URL is automatically saved to environment variable 'image_url_1'."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Files from Device (Multiple)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const responseData = pm.response.json();",
+                  "    if (responseData.success && Array.isArray(responseData.data)) {",
+                  "        responseData.data.forEach((img, index) => {",
+                  "            pm.environment.set(`image_url_${index + 1}`, img.url);",
+                  "            pm.environment.set(`image_public_id_${index + 1}`, img.publicId);",
+                  "            console.log(`✅ Image ${index + 1} URL saved:`, img.url);",
+                  "        });",
+                  "        console.log(`✅ Total images uploaded: ${responseData.data.length}`);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "folder",
+                  "value": "properties",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images/file",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images", "file"]
+            },
+            "description": "Upload multiple image files directly from your device (max 10). Click 'Select Files' in each file field to choose images. URLs are automatically saved to environment variables 'image_url_1', 'image_url_2', etc."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Image by Public ID",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"publicId\": \"{{image_public_id_1}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images/delete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images", "delete"]
+            },
+            "description": "Delete a single image from Cloudinary using its public ID (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Image by URL",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"{{image_url_1}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images/delete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images", "delete"]
+            },
+            "description": "Delete a single image from Cloudinary using its URL (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Multiple Images",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"publicIds\": [\n    \"{{image_public_id_1}}\",\n    \"{{image_public_id_2}}\",\n    \"{{image_public_id_3}}\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images/delete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images", "delete"]
+            },
+            "description": "Delete multiple images from Cloudinary using their public IDs (requires authentication)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Cloudinary image upload and deletion endpoints"
+    },
+    {
+      "name": "Complete Workflows",
+      "item": [
+        {
+          "name": "1. Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const responseData = pm.response.json();",
+                  "    if (responseData.success && responseData.data.token) {",
+                  "        pm.environment.set(\"admin_token\", responseData.data.token);",
+                  "        console.log(\"✅ Step 1: Login successful\");",
+                  "        console.log(\"Token saved:\", responseData.data.token);",
+                  "        console.log(\"\\n📋 Next step: Run '2. Upload Images'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@test.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "STEP 1: Login to get authentication token"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Upload Images",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const responseData = pm.response.json();",
+                  "    if (responseData.success && Array.isArray(responseData.data)) {",
+                  "        responseData.data.forEach((img, index) => {",
+                  "            pm.environment.set(`image_url_${index + 1}`, img.url);",
+                  "            pm.environment.set(`image_public_id_${index + 1}`, img.publicId);",
+                  "            console.log(`✅ Image ${index + 1} uploaded:`, img.url);",
+                  "        });",
+                  "        console.log(`\\n✅ Step 2: ${responseData.data.length} images uploaded successfully`);",
+                  "        console.log(\"\\n📋 Next step: Run '3. Create Property with Images'\");",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"images\": [\n    \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\",\n    \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg==\",\n    \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==\"\n  ],\n  \"folder\": \"properties\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/images",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "images"]
+            },
+            "description": "STEP 2: Upload images to Cloudinary. Replace the test base64 strings with your actual images."
+          },
+          "response": []
+        },
+        {
+          "name": "3. Create Property with Images",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const responseData = pm.response.json();",
+                  "    pm.environment.set(\"property_id\", responseData.data.id);",
+                  "    console.log(\"✅ Step 3: Property created successfully!\");",
+                  "    console.log(\"Property ID:\", responseData.data.id);",
+                  "    console.log(\"Title:\", responseData.data.title);",
+                  "    console.log(\"Images:\", responseData.data.images.length);",
+                  "    console.log(\"\\n🎉 Workflow complete! Property created with images.\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Luxury Beachfront Villa\",\n  \"description\": \"Stunning 5-bedroom villa with panoramic ocean views, infinity pool, and private beach access. Recently renovated with high-end finishes throughout.\",\n  \"price\": 2500000,\n  \"transactionType\": \"buy\",\n  \"propertyType\": \"villa\",\n  \"beds\": 5,\n  \"baths\": 4,\n  \"size\": 4500,\n  \"furnishingStatus\": \"furnished\",\n  \"propertyFeatures\": [\n    \"Private Pool\",\n    \"Beach Access\",\n    \"Waterviews\",\n    \"Gym\",\n    \"Garden\"\n  ],\n  \"seller\": {\n    \"name\": \"Michael Rodriguez\",\n    \"job\": \"Senior Property Consultant\",\n    \"phone\": \"+1-305-555-7890\",\n    \"email\": \"michael.r@coastalproperties.com\"\n  },\n  \"location\": {\n    \"address\": \"123 Ocean Drive\",\n    \"city\": \"Miami Beach\",\n    \"state\": \"FL\",\n    \"zipCode\": \"33139\",\n    \"country\": \"USA\"\n  },\n  \"amenities\": [\n    \"Infinity Pool\",\n    \"Private Beach Access\",\n    \"Smart Home System\",\n    \"3-Car Garage\",\n    \"Outdoor Kitchen\",\n    \"Home Theater\",\n    \"Wine Cellar\",\n    \"Gym\"\n  ],\n  \"images\": [\n    \"{{image_url_1}}\",\n    \"{{image_url_2}}\",\n    \"{{image_url_3}}\"\n  ],\n  \"lotSize\": 8000,\n  \"yearBuilt\": 2020,\n  \"status\": \"available\",\n  \"featured\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"]
+            },
+            "description": "STEP 3: Create property using the Cloudinary URLs from step 2. The image URLs are automatically injected from environment variables."
+          },
+          "response": []
+        }
+      ],
+      "description": "Complete workflow demonstrating the full process: Login → Upload Images → Create Property with Images. Run these requests in order (1, 2, 3)."
     }
   ],
   "variable": [
@@ -408,6 +969,36 @@
     },
     {
       "key": "property_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "image_url_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "image_url_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "image_url_3",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "image_public_id_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "image_public_id_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "image_public_id_3",
       "value": "",
       "type": "string"
     }

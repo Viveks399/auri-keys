@@ -15,6 +15,12 @@ MONGODB_URI=mongodb://localhost:27017/auri-keys
 # JWT Secret for Authentication
 # IMPORTANT: Change this to a strong, random secret in production!
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# Cloudinary Configuration (for image uploads)
+# Get these from: https://console.cloudinary.com/
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
 ---
@@ -47,6 +53,11 @@ MONGODB_URI=mongodb://localhost:27017/auri-keys
 
 # JWT Authentication
 JWT_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
+
+# Cloudinary (Image Uploads)
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=123456789012345
+CLOUDINARY_API_SECRET=abcdefghijklmnopqrstuvwxyz123456
 ```
 
 ---
@@ -67,6 +78,28 @@ JWT_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
 - **Format:** Any string (recommended: 32+ character random string)
 - **Required:** Yes
 - **Default:** `your-secret-key-change-in-production` (⚠️ insecure!)
+
+### CLOUDINARY_CLOUD_NAME
+
+- **Purpose:** Your Cloudinary cloud name for image hosting
+- **Format:** String (from Cloudinary dashboard)
+- **Required:** Yes (for image uploads)
+- **Get it from:** [Cloudinary Console](https://console.cloudinary.com/)
+
+### CLOUDINARY_API_KEY
+
+- **Purpose:** API key for Cloudinary authentication
+- **Format:** Numeric string
+- **Required:** Yes (for image uploads)
+- **Get it from:** [Cloudinary Console](https://console.cloudinary.com/)
+
+### CLOUDINARY_API_SECRET
+
+- **Purpose:** API secret for Cloudinary authentication
+- **Format:** Alphanumeric string
+- **Required:** Yes (for image uploads)
+- **Get it from:** [Cloudinary Console](https://console.cloudinary.com/)
+- **Security:** Keep this secret! Never commit or expose publicly
 
 ---
 
@@ -176,6 +209,18 @@ heroku config:set JWT_SECRET="your-secret-key"
 // Add to any server-side file temporarily
 console.log("MONGODB_URI:", process.env.MONGODB_URI ? "Set ✅" : "Missing ❌");
 console.log("JWT_SECRET:", process.env.JWT_SECRET ? "Set ✅" : "Missing ❌");
+console.log(
+  "CLOUDINARY_CLOUD_NAME:",
+  process.env.CLOUDINARY_CLOUD_NAME ? "Set ✅" : "Missing ❌"
+);
+console.log(
+  "CLOUDINARY_API_KEY:",
+  process.env.CLOUDINARY_API_KEY ? "Set ✅" : "Missing ❌"
+);
+console.log(
+  "CLOUDINARY_API_SECRET:",
+  process.env.CLOUDINARY_API_SECRET ? "Set ✅" : "Missing ❌"
+);
 ```
 
 ### Terminal Check
@@ -197,10 +242,12 @@ $env:JWT_SECRET
 - [ ] Create `.env.local` file in project root
 - [ ] Add `MONGODB_URI` with valid connection string
 - [ ] Add `JWT_SECRET` with strong random key (32+ chars)
+- [ ] Add Cloudinary credentials (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`)
 - [ ] Verify `.env.local` is in `.gitignore`
 - [ ] Restart development server (`npm run dev`)
 - [ ] Test database connection
 - [ ] Test authentication (signup/login)
+- [ ] Test image upload (optional)
 - [ ] For production: Add env vars to hosting platform
 - [ ] For production: Use different JWT_SECRET
 
@@ -237,6 +284,11 @@ MONGODB_URI=
 
 # JWT Authentication Secret
 JWT_SECRET=
+
+# Cloudinary Image Hosting
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
 # Optional: Add more as needed
 # NODE_ENV=development

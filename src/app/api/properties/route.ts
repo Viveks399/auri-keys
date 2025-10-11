@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { propertyStore } from "@/lib/propertyStore";
 import { CreatePropertyDTO, ApiResponse, Property } from "@/types/property";
 import { authenticateAdmin, unauthorizedResponse } from "@/lib/authMiddleware";
+import { uploadImage } from "@/lib/cloudinary";
 
 // GET /api/properties - Get all properties or search with filters (Protected - Requires Authentication)
 export async function GET(request: NextRequest) {
@@ -55,7 +56,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/properties - Create a new property (Protected - Requires Authentication)
+// POST /api/properties - Create a new property with optional image uploads (Protected - Requires Authentication)
 export async function POST(request: NextRequest) {
   try {
     // Authenticate admin
@@ -64,13 +65,97 @@ export async function POST(request: NextRequest) {
       return unauthorizedResponse(authResult.error);
     }
 
-    const body: CreatePropertyDTO = await request.json();
+    const contentType = request.headers.get("content-type") || "";
+    let body: CreatePropertyDTO;
+    let imageUrls: string[] = [];
+
+    // Handle both form-data (with files) and JSON requests
+    if (contentType.includes("multipart/form-data")) {
+      // Handle form data with file uploads
+      const formData = await request.formData();
+
+      // Parse property data from form field
+      const propertyDataField = formData.get("propertyData");
+      if (!propertyDataField) {
+        const response: ApiResponse<never> = {
+          success: false,
+          error:
+            "Missing propertyData field. Send property details as JSON string in 'propertyData' field",
+        };
+        return NextResponse.json(response, { status: 400 });
+      }
+
+      try {
+        body = JSON.parse(propertyDataField.toString());
+      } catch (parseError) {
+        const response: ApiResponse<never> = {
+          success: false,
+          error: "Invalid JSON in propertyData field",
+        };
+        return NextResponse.json(response, { status: 400 });
+      }
+
+      // Handle file uploads
+      const files: File[] = [];
+      formData.forEach((value, key) => {
+        if (key === "images" && value instanceof File) {
+          files.push(value);
+        }
+      });
+
+      // Upload files to Cloudinary
+      if (files.length > 0) {
+        const uploadPromises = files.map(async (file) => {
+          const bytes = await file.arrayBuffer();
+          const buffer = Buffer.from(bytes);
+          const base64Image = `data:${file.type};base64,${buffer.toString(
+            "base64"
+          )}`;
+
+          return uploadImage(base64Image, "properties");
+        });
+
+        const uploadResults = await Promise.all(uploadPromises);
+        imageUrls = uploadResults.map(
+          (result: { url: string; publicId: string }) => result.url
+        );
+      }
+    } else {
+      // Handle regular JSON request (backward compatibility)
+      body = await request.json();
+    }
 
     // Basic validation
-    if (!body.title || !body.price || !body.location || !body.features) {
+    if (
+      !body.title ||
+      !body.price ||
+      !body.location ||
+      !body.transactionType ||
+      !body.propertyType ||
+      body.beds === undefined ||
+      body.baths === undefined ||
+      body.size === undefined ||
+      !body.furnishingStatus ||
+      !body.seller
+    ) {
       const response: ApiResponse<never> = {
         success: false,
-        error: "Missing required fields: title, price, location, features",
+        error:
+          "Missing required fields: title, price, location, transactionType, propertyType, beds, baths, size, furnishingStatus, seller",
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    // Validate seller information
+    if (
+      !body.seller.name ||
+      !body.seller.job ||
+      !body.seller.phone ||
+      !body.seller.email
+    ) {
+      const response: ApiResponse<never> = {
+        success: false,
+        error: "Missing required seller fields: name, job, phone, email",
       };
       return NextResponse.json(response, { status: 400 });
     }
@@ -83,12 +168,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(response, { status: 400 });
     }
 
+    if (body.beds < 0 || body.baths < 0 || body.size <= 0) {
+      const response: ApiResponse<never> = {
+        success: false,
+        error: "Beds, baths, and size must be positive numbers",
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    // Merge uploaded images with any images in the body
+    const allImages = [...imageUrls, ...(body.images || [])];
+    body.images = allImages;
+
     const newProperty = await propertyStore.create(body);
 
     const response: ApiResponse<Property> = {
       success: true,
       data: newProperty,
-      message: "Property created successfully",
+      message: `Property created successfully${
+        imageUrls.length > 0
+          ? ` with ${imageUrls.length} image(s) uploaded`
+          : ""
+      }`,
     };
 
     return NextResponse.json(response, { status: 201 });
