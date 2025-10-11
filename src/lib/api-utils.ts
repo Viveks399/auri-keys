@@ -1,4 +1,5 @@
 // Utility functions for API calls from the frontend
+import { CreatePropertyDTO, UpdatePropertyDTO } from "@/types/property";
 
 const API_BASE_URL = "/api";
 
@@ -42,7 +43,7 @@ export async function fetchPropertyById(id: string) {
   return response.json();
 }
 
-export async function createProperty(data: any) {
+export async function createProperty(data: CreatePropertyDTO) {
   const response = await fetch(`${API_BASE_URL}/properties`, {
     method: "POST",
     headers: {
@@ -59,7 +60,7 @@ export async function createProperty(data: any) {
   return response.json();
 }
 
-export async function updateProperty(id: string, data: any) {
+export async function updateProperty(id: string, data: UpdatePropertyDTO) {
   const response = await fetch(`${API_BASE_URL}/properties/${id}`, {
     method: "PUT",
     headers: {

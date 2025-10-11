@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authenticatedFetch } from "@/lib/authUtils";
+import { Property } from "@/types/property";
 import {
   PROPERTY_TYPES,
   FURNISHING_STATUS,
@@ -42,13 +43,22 @@ interface FormData {
   lotSize: string;
 }
 
-export default function AddPropertyForm() {
+interface AddPropertyFormProps {
+  existingProperty?: Property;
+  isEditMode?: boolean;
+}
+
+export default function AddPropertyForm({
+  existingProperty,
+  isEditMode = false,
+}: AddPropertyFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
 
   const [formData, setFormData] = useState<FormData>({
     title: "",
@@ -80,6 +90,32 @@ export default function AddPropertyForm() {
     yearBuilt: "",
     lotSize: "",
   });
+
+  // Initialize form with existing property data in edit mode
+  useEffect(() => {
+    if (isEditMode && existingProperty) {
+      setFormData({
+        title: existingProperty.title,
+        description: existingProperty.description,
+        price: existingProperty.price.toString(),
+        transactionType: existingProperty.transactionType,
+        propertyType: existingProperty.propertyType,
+        beds: existingProperty.beds.toString(),
+        baths: existingProperty.baths.toString(),
+        size: existingProperty.size.toString(),
+        furnishingStatus: existingProperty.furnishingStatus,
+        propertyFeatures: existingProperty.propertyFeatures || [],
+        seller: existingProperty.seller,
+        location: existingProperty.location,
+        amenities: existingProperty.amenities?.join(", ") || "",
+        status: existingProperty.status,
+        featured: existingProperty.featured || false,
+        yearBuilt: existingProperty.yearBuilt?.toString() || "",
+        lotSize: existingProperty.lotSize?.toString() || "",
+      });
+      setExistingImages(existingProperty.images || []);
+    }
+  }, [isEditMode, existingProperty]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -138,6 +174,10 @@ export default function AddPropertyForm() {
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const removeExistingImage = (index: number) => {
+    setExistingImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -145,6 +185,43 @@ export default function AddPropertyForm() {
     setLoading(true);
 
     try {
+      // Validate numeric fields
+      const price = parseFloat(formData.price);
+      const beds = parseInt(formData.beds);
+      const baths = parseInt(formData.baths);
+      const size = parseFloat(formData.size);
+
+      if (isNaN(price) || price <= 0) {
+        throw new Error("Please enter a valid price");
+      }
+      if (isNaN(beds) || beds < 0) {
+        throw new Error("Please enter a valid number of bedrooms");
+      }
+      if (isNaN(baths) || baths < 0) {
+        throw new Error("Please enter a valid number of bathrooms");
+      }
+      if (isNaN(size) || size <= 0) {
+        throw new Error("Please enter a valid property size");
+      }
+
+      // Validate optional numeric fields
+      const yearBuilt = formData.yearBuilt
+        ? parseInt(formData.yearBuilt)
+        : null;
+      const lotSize = formData.lotSize ? parseFloat(formData.lotSize) : null;
+
+      if (
+        formData.yearBuilt &&
+        (isNaN(yearBuilt!) ||
+          yearBuilt! < 1800 ||
+          yearBuilt! > new Date().getFullYear() + 1)
+      ) {
+        throw new Error("Please enter a valid year built");
+      }
+      if (formData.lotSize && (isNaN(lotSize!) || lotSize! <= 0)) {
+        throw new Error("Please enter a valid lot size");
+      }
+
       // Create FormData for multipart upload
       const submitData = new FormData();
 
@@ -152,12 +229,12 @@ export default function AddPropertyForm() {
       const propertyData = {
         title: formData.title,
         description: formData.description,
-        price: parseFloat(formData.price),
+        price,
         transactionType: formData.transactionType,
         propertyType: formData.propertyType,
-        beds: parseInt(formData.beds),
-        baths: parseInt(formData.baths),
-        size: parseFloat(formData.size),
+        beds,
+        baths,
+        size,
         furnishingStatus: formData.furnishingStatus,
         propertyFeatures: formData.propertyFeatures,
         seller: formData.seller,
@@ -167,36 +244,52 @@ export default function AddPropertyForm() {
           : [],
         status: formData.status,
         featured: formData.featured,
-        ...(formData.yearBuilt && { yearBuilt: parseInt(formData.yearBuilt) }),
-        ...(formData.lotSize && { lotSize: parseFloat(formData.lotSize) }),
+        ...(yearBuilt && { yearBuilt }),
+        ...(lotSize && { lotSize }),
+        ...(isEditMode && { images: existingImages }), // Keep existing images in edit mode
       };
 
       submitData.append("propertyData", JSON.stringify(propertyData));
 
-      // Add images
+      // Add new images
       images.forEach((image) => {
         submitData.append("images", image);
       });
 
-      const response = await authenticatedFetch("/api/properties", {
-        method: "POST",
+      const url =
+        isEditMode && existingProperty
+          ? `/api/properties/${existingProperty.id}`
+          : "/api/properties";
+
+      const method = isEditMode ? "PUT" : "POST";
+
+      const response = await authenticatedFetch(url, {
+        method,
         body: submitData,
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to create property");
+        throw new Error(
+          data.error || `Failed to ${isEditMode ? "update" : "create"} property`
+        );
       }
 
-      setSuccess("Property created successfully! Redirecting...");
+      setSuccess(
+        `Property ${
+          isEditMode ? "updated" : "created"
+        } successfully! Redirecting...`
+      );
 
       setTimeout(() => {
         router.push("/admin/dashboard");
       }, 1500);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to create property"
+        err instanceof Error
+          ? err.message
+          : `Failed to ${isEditMode ? "update" : "create"} property`
       );
     } finally {
       setLoading(false);
@@ -228,10 +321,12 @@ export default function AddPropertyForm() {
             Back to Dashboard
           </Link>
           <h1 className="text-4xl font-display font-bold text-gray-900 mb-2">
-            Add New Property
+            {isEditMode ? "Edit Property" : "Add New Property"}
           </h1>
           <p className="text-gray-600">
-            Fill in the details to create a new property listing
+            {isEditMode
+              ? "Update the property details below"
+              : "Fill in the details to create a new property listing"}
           </p>
         </div>
 
@@ -272,7 +367,7 @@ export default function AddPropertyForm() {
                     value={formData.title}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="e.g., Luxury Villa in Dubai Marina"
                   />
                 </div>
@@ -287,14 +382,14 @@ export default function AddPropertyForm() {
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none text-gray-900 placeholder:text-gray-400"
                     placeholder="Describe the property in detail..."
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Price ($) *
+                    Price (AED) *
                   </label>
                   <input
                     type="number"
@@ -304,7 +399,7 @@ export default function AddPropertyForm() {
                     required
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="5000000"
                   />
                 </div>
@@ -318,7 +413,7 @@ export default function AddPropertyForm() {
                     value={formData.transactionType}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
                   >
                     <option value="buy">Buy/Sell</option>
                     <option value="rent">Rent</option>
@@ -334,7 +429,7 @@ export default function AddPropertyForm() {
                     value={formData.propertyType}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all capitalize"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all capitalize text-gray-900"
                   >
                     {PROPERTY_TYPES.map((type) => (
                       <option key={type} value={type} className="capitalize">
@@ -352,7 +447,7 @@ export default function AddPropertyForm() {
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all capitalize"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all capitalize text-gray-900"
                   >
                     {PROPERTY_STATUS.map((status) => (
                       <option
@@ -385,7 +480,7 @@ export default function AddPropertyForm() {
                     onChange={handleChange}
                     required
                     min="0"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="3"
                   />
                 </div>
@@ -402,7 +497,7 @@ export default function AddPropertyForm() {
                     required
                     min="0"
                     step="0.5"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="2"
                   />
                 </div>
@@ -418,7 +513,7 @@ export default function AddPropertyForm() {
                     onChange={handleChange}
                     required
                     min="0"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="2500"
                   />
                 </div>
@@ -432,7 +527,7 @@ export default function AddPropertyForm() {
                     value={formData.furnishingStatus}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all capitalize"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all capitalize text-gray-900"
                   >
                     {FURNISHING_STATUS.map((status) => (
                       <option
@@ -457,7 +552,7 @@ export default function AddPropertyForm() {
                     onChange={handleChange}
                     min="1900"
                     max={new Date().getFullYear()}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="2023"
                   />
                 </div>
@@ -472,7 +567,7 @@ export default function AddPropertyForm() {
                     value={formData.lotSize}
                     onChange={handleChange}
                     min="0"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="5000"
                   />
                 </div>
@@ -495,7 +590,7 @@ export default function AddPropertyForm() {
                     value={formData.location.address}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="123 Marina Walk"
                   />
                 </div>
@@ -510,7 +605,7 @@ export default function AddPropertyForm() {
                     value={formData.location.city}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="Dubai"
                   />
                 </div>
@@ -525,7 +620,7 @@ export default function AddPropertyForm() {
                     value={formData.location.state}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="Dubai"
                   />
                 </div>
@@ -540,7 +635,7 @@ export default function AddPropertyForm() {
                     value={formData.location.zipCode}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="12345"
                   />
                 </div>
@@ -555,7 +650,7 @@ export default function AddPropertyForm() {
                     value={formData.location.country}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="UAE"
                   />
                 </div>
@@ -578,7 +673,7 @@ export default function AddPropertyForm() {
                     value={formData.seller.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="Ahmed Al-Mansouri"
                   />
                 </div>
@@ -593,7 +688,7 @@ export default function AddPropertyForm() {
                     value={formData.seller.job}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="Senior Property Consultant"
                   />
                 </div>
@@ -608,7 +703,7 @@ export default function AddPropertyForm() {
                     value={formData.seller.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="+971-50-123-4567"
                   />
                 </div>
@@ -623,7 +718,7 @@ export default function AddPropertyForm() {
                     value={formData.seller.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     placeholder="ahmed@aurikeys.com"
                   />
                 </div>
@@ -673,7 +768,7 @@ export default function AddPropertyForm() {
                   name="amenities"
                   value={formData.amenities}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                   placeholder="24/7 Security, Parking, Concierge, Swimming Pool"
                 />
                 <p className="mt-1 text-xs text-gray-500">
@@ -725,37 +820,81 @@ export default function AddPropertyForm() {
                   </label>
                 </div>
 
-                {/* Image Previews */}
-                {imagePreviews.length > 0 && (
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {imagePreviews.map((preview, index) => (
-                      <div key={index} className="relative group">
-                        <img
-                          src={preview}
-                          alt={`Preview ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-lg"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(index)}
-                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                {/* Existing Images (Edit Mode) */}
+                {isEditMode && existingImages.length > 0 && (
+                  <div className="mt-4">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Current Images
+                    </label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {existingImages.map((image, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={image}
+                            alt={`Existing ${index + 1}`}
+                            className="w-full h-32 object-cover rounded-lg border-2 border-blue-200"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(index)}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* New Image Previews */}
+                {imagePreviews.length > 0 && (
+                  <div className="mt-4">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      {isEditMode ? "New Images to Add" : "Image Previews"}
+                    </label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {imagePreviews.map((preview, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={preview}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-32 object-cover rounded-lg"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(index)}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -817,8 +956,12 @@ export default function AddPropertyForm() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    Creating Property...
+                    {isEditMode
+                      ? "Updating Property..."
+                      : "Creating Property..."}
                   </span>
+                ) : isEditMode ? (
+                  "Update Property"
                 ) : (
                   "Create Property"
                 )}

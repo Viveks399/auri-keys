@@ -30,6 +30,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
 
   useEffect(() => {
     // Check authentication
@@ -69,8 +70,8 @@ export default function AdminDashboard() {
   const calculateStats = (props: Property[]) => {
     const stats = {
       totalProperties: props.length,
-      activeListings: props.filter((p) => p.status === "active").length,
-      forSale: props.filter((p) => p.transactionType === "sell").length,
+      activeListings: props.filter((p) => p.status === "available").length,
+      forSale: props.filter((p) => p.transactionType === "buy").length,
       forRent: props.filter((p) => p.transactionType === "rent").length,
     };
     setStats(stats);
@@ -225,7 +226,7 @@ export default function AdminDashboard() {
             Welcome back, {admin?.name}! 👋
           </h2>
           <p className="text-gray-600">
-            Here's what's happening with your properties today.
+            Here&apos;s what&apos;s happening with your properties today.
           </p>
         </div>
 
@@ -441,7 +442,7 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            property.status === "active"
+                            property.status === "available"
                               ? "bg-green-100 text-green-800"
                               : property.status === "sold"
                               ? "bg-gray-100 text-gray-800"
@@ -453,7 +454,11 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2">
-                          <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150">
+                          <button
+                            onClick={() => setViewingProperty(property)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150"
+                            title="View details"
+                          >
                             <svg
                               className="w-5 h-5"
                               fill="none"
@@ -474,7 +479,11 @@ export default function AdminDashboard() {
                               />
                             </svg>
                           </button>
-                          <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-150">
+                          <Link
+                            href={`/admin/properties/${property.id}`}
+                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-150 inline-block"
+                            title="Edit property"
+                          >
                             <svg
                               className="w-5 h-5"
                               fill="none"
@@ -488,7 +497,7 @@ export default function AdminDashboard() {
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                               />
                             </svg>
-                          </button>
+                          </Link>
                           <button
                             onClick={() => handleDeleteProperty(property.id)}
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
@@ -517,6 +526,273 @@ export default function AdminDashboard() {
           )}
         </div>
       </main>
+
+      {/* Property View Modal */}
+      {viewingProperty && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setViewingProperty(null)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+              <h3 className="text-2xl font-display font-bold text-gray-900">
+                Property Details
+              </h3>
+              <button
+                onClick={() => setViewingProperty(null)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <svg
+                  className="w-6 h-6 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {/* Images Gallery */}
+              {viewingProperty.images && viewingProperty.images.length > 0 && (
+                <div className="mb-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {viewingProperty.images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`${viewingProperty.title} - ${index + 1}`}
+                        className="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Property Title and Status */}
+              <div className="mb-6">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="text-3xl font-bold text-gray-900">
+                    {viewingProperty.title}
+                  </h4>
+                  <span
+                    className={`px-4 py-2 rounded-full text-sm font-medium ${
+                      viewingProperty.status === "available"
+                        ? "bg-green-100 text-green-800"
+                        : viewingProperty.status === "sold"
+                        ? "bg-gray-100 text-gray-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {viewingProperty.status}
+                  </span>
+                </div>
+                <p className="text-4xl font-bold text-blue-600 mb-4">
+                  {formatPrice(viewingProperty.price)}
+                  <span className="text-lg text-gray-600 font-normal ml-2 capitalize">
+                    / {viewingProperty.transactionType}
+                  </span>
+                </p>
+              </div>
+
+              {/* Key Features */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <p className="text-sm text-gray-600 mb-1">Bedrooms</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {viewingProperty.beds}
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <p className="text-sm text-gray-600 mb-1">Bathrooms</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {viewingProperty.baths}
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <p className="text-sm text-gray-600 mb-1">Size</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {viewingProperty.size}
+                  </p>
+                  <p className="text-xs text-gray-500">sqft</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <p className="text-sm text-gray-600 mb-1">Type</p>
+                  <p className="text-lg font-bold text-gray-900 capitalize">
+                    {viewingProperty.propertyType}
+                  </p>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="mb-6">
+                <h5 className="text-lg font-semibold text-gray-900 mb-2">
+                  Description
+                </h5>
+                <p className="text-gray-700 leading-relaxed">
+                  {viewingProperty.description}
+                </p>
+              </div>
+
+              {/* Location */}
+              <div className="mb-6">
+                <h5 className="text-lg font-semibold text-gray-900 mb-3">
+                  Location
+                </h5>
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <p className="text-gray-900 font-medium">
+                    {viewingProperty.location.address}
+                  </p>
+                  <p className="text-gray-600">
+                    {viewingProperty.location.city},{" "}
+                    {viewingProperty.location.state}{" "}
+                    {viewingProperty.location.zipCode}
+                  </p>
+                  <p className="text-gray-600">
+                    {viewingProperty.location.country}
+                  </p>
+                </div>
+              </div>
+
+              {/* Property Details */}
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h5 className="text-lg font-semibold text-gray-900 mb-3">
+                    Property Details
+                  </h5>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Furnishing:</span>
+                      <span className="font-medium text-gray-900 capitalize">
+                        {viewingProperty.furnishingStatus}
+                      </span>
+                    </div>
+                    {viewingProperty.yearBuilt && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Year Built:</span>
+                        <span className="font-medium text-gray-900">
+                          {viewingProperty.yearBuilt}
+                        </span>
+                      </div>
+                    )}
+                    {viewingProperty.lotSize && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Lot Size:</span>
+                        <span className="font-medium text-gray-900">
+                          {viewingProperty.lotSize} sqft
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Listing Date:</span>
+                      <span className="font-medium text-gray-900">
+                        {new Date(
+                          viewingProperty.listingDate
+                        ).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seller Information */}
+                <div>
+                  <h5 className="text-lg font-semibold text-gray-900 mb-3">
+                    Seller Information
+                  </h5>
+                  <div className="bg-blue-50 p-4 rounded-xl space-y-2">
+                    <p className="font-medium text-gray-900">
+                      {viewingProperty.seller.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {viewingProperty.seller.job}
+                    </p>
+                    <div className="pt-2 border-t border-blue-200">
+                      <p className="text-sm text-gray-700">
+                        📞 {viewingProperty.seller.phone}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        ✉️ {viewingProperty.seller.email}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Property Features */}
+              {viewingProperty.propertyFeatures &&
+                viewingProperty.propertyFeatures.length > 0 && (
+                  <div className="mb-6">
+                    <h5 className="text-lg font-semibold text-gray-900 mb-3">
+                      Property Features
+                    </h5>
+                    <div className="flex flex-wrap gap-2">
+                      {viewingProperty.propertyFeatures.map(
+                        (feature, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium"
+                          >
+                            {feature}
+                          </span>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              {/* Amenities */}
+              {viewingProperty.amenities &&
+                viewingProperty.amenities.length > 0 && (
+                  <div className="mb-6">
+                    <h5 className="text-lg font-semibold text-gray-900 mb-3">
+                      Amenities
+                    </h5>
+                    <div className="flex flex-wrap gap-2">
+                      {viewingProperty.amenities.map((amenity, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
+                        >
+                          {amenity}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                <Link
+                  href={`/admin/properties/${viewingProperty.id}`}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-200 text-center"
+                >
+                  Edit Property
+                </Link>
+                <button
+                  onClick={() => {
+                    setViewingProperty(null);
+                    handleDeleteProperty(viewingProperty.id);
+                  }}
+                  className="px-6 py-3 bg-red-50 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-colors duration-200 border border-red-200"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
