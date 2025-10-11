@@ -2,27 +2,24 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer
-      className="w-full dark:bg-background-dark font-display text-[#1C1917] dark:text-background-light relative md:sticky md:bottom-0 left-0 z-0"
-      style={{ backgroundColor: "#f8f7f6" }}
-    >
+    <footer className="w-full bg-zinc-100 dark:bg-zinc-800 font-display relative md:sticky md:bottom-0 left-0 z-0">
       <div className="container mx-auto px-6 lg:px-8 py-16">
         <div className="relative pt-8">
           {/* Top border covering 70-80% width */}
-          <div className="absolute -top-px left-1/2 transform -translate-x-1/2 w-4/4 h-px bg-zinc-200/50 dark:bg-zinc-800/50"></div>
+          <div className="absolute -top-px left-1/2 transform -translate-x-1/2 w-4/4 h-px bg-zinc-300/50 dark:bg-zinc-700/50"></div>
           <div className="flex flex-col gap-12">
             {/* Main 4 sections */}
             <div className="flex flex-col md:flex-row lg:grid lg:grid-cols-4 gap-12">
               {/* About Auri Keys */}
               <div className="flex-1 lg:col-span-1">
-                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100 mb-6">
                   About Auri Keys
                 </h3>
-                <p className="text-sm leading-relaxed mb-4 text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm leading-relaxed mb-4 text-zinc-700 dark:text-zinc-300">
                   Auri Keys helps you find your dream home in Dubai&apos;s most
                   prestigious communities.
                 </p>
-                <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                   123 Luxury Lane,
                   <br />
                   Downtown Dubai, UAE
@@ -31,42 +28,42 @@ const Footer = () => {
 
               {/* Quick Links */}
               <div className="flex-1 lg:col-span-1">
-                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100 mb-6">
                   Quick Links
                 </h3>
                 <nav className="space-y-3">
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Home
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Properties
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Communities
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Off-Plan
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     About Us
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Careers
@@ -76,36 +73,36 @@ const Footer = () => {
 
               {/* Resources */}
               <div className="flex-1 lg:col-span-1">
-                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100 mb-6">
                   Resources
                 </h3>
                 <nav className="space-y-3">
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Blog
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Guides
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Mortgage Calculator
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     FAQs
                   </a>
                   <a
-                    className="block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Market Reports
@@ -115,23 +112,23 @@ const Footer = () => {
 
               {/* Concierge Service Hub */}
               <div className="flex-1 lg:col-span-1">
-                <h3 className="text-lg font-bold text-zinc-900 mb-6">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100 mb-6">
                   Concierge Service Hub
                 </h3>
-                <p className="text-sm leading-relaxed mb-4 text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm leading-relaxed mb-4 text-zinc-700 dark:text-zinc-300">
                   Experience unparalleled personal assistance for your luxury
                   real estate needs. Connect with us directly.
                 </p>
                 {/* Desktop layout - buttons and links inside this section */}
                 <div className="hidden lg:block">
                   <div className="space-y-4">
-                    <button className="w-full bg-primary text-zinc-900 font-bold py-3 px-6 rounded-lg text-sm hover:opacity-90 transition-opacity flex items-center justify-center">
+                    <button className="w-full bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 font-bold py-3 px-6 rounded-lg text-sm hover:!bg-[#f8f7f6] hover:!text-zinc-900 transition-colors flex items-center justify-center cursor-pointer">
                       <span className="material-symbols-outlined mr-2">
                         chat
                       </span>
                       Direct Chat
                     </button>
-                    <button className="w-full bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 font-bold py-3 px-6 rounded-lg text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center justify-center">
+                    <button className="w-full bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 font-bold py-3 px-6 rounded-lg text-sm hover:!bg-[#f8f7f6] hover:!text-zinc-900 transition-colors flex items-center justify-center cursor-pointer">
                       <span className="material-symbols-outlined mr-2">
                         phone_in_talk
                       </span>
@@ -141,19 +138,19 @@ const Footer = () => {
                   <div className="mt-8">
                     <nav className="space-y-2">
                       <a
-                        className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                        className="block text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                         href="#"
                       >
                         Terms & Conditions
                       </a>
                       <a
-                        className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                        className="block text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                         href="#"
                       >
                         Privacy Policy
                       </a>
                       <a
-                        className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                        className="block text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                         href="#"
                       >
                         Cookie Policy
@@ -167,11 +164,11 @@ const Footer = () => {
             {/* Buttons and Policy Links - Below the 4 sections for tablet */}
             <div className="flex flex-col md:flex-row md:justify-between lg:hidden space-y-4 md:space-y-0">
               <div className="flex flex-col space-y-4 md:w-1/3">
-                <button className="w-full bg-primary text-zinc-900 font-bold py-3 px-6 rounded-lg text-sm hover:opacity-90 transition-opacity flex items-center justify-center">
+                <button className="w-full bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 font-bold py-3 px-6 rounded-lg text-sm hover:!bg-[#f8f7f6] hover:!text-zinc-900 transition-colors flex items-center justify-center cursor-pointer">
                   <span className="material-symbols-outlined mr-2">chat</span>
                   Direct Chat
                 </button>
-                <button className="w-full bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 font-bold py-3 px-6 rounded-lg text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center justify-center">
+                <button className="w-full bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 font-bold py-3 px-6 rounded-lg text-sm hover:!bg-[#f8f7f6] hover:!text-zinc-900 transition-colors flex items-center justify-center cursor-pointer">
                   <span className="material-symbols-outlined mr-2">
                     phone_in_talk
                   </span>
@@ -181,19 +178,19 @@ const Footer = () => {
               <div className="flex flex-col md:w-1/3 md:items-start">
                 <nav className="space-y-2">
                   <a
-                    className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Terms & Conditions
                   </a>
                   <a
-                    className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Privacy Policy
                   </a>
                   <a
-                    className="block text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    className="block text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     href="#"
                   >
                     Cookie Policy
@@ -204,15 +201,15 @@ const Footer = () => {
           </div>
 
           {/* Bottom Section */}
-          <div className="mt-16 pt-8 border-t border-zinc-200/50 dark:border-zinc-800/50">
+          <div className="mt-16 pt-8 border-t border-zinc-300/50 dark:border-zinc-700/50">
             <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-xs text-zinc-700 dark:text-zinc-300">
                 © 2025 Auri Keys Real Estate. All Rights Reserved.
               </p>
               <div className="flex items-center space-x-5">
                 {/* Instagram */}
                 <a
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                  className="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                   href="#"
                 >
                   <svg
@@ -227,7 +224,7 @@ const Footer = () => {
                 </a>
                 {/* Facebook */}
                 <a
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                  className="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                   href="#"
                 >
                   <svg
@@ -242,7 +239,7 @@ const Footer = () => {
                 </a>
                 {/* YouTube */}
                 <a
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                  className="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                   href="#"
                 >
                   <svg
@@ -257,7 +254,7 @@ const Footer = () => {
                 </a>
                 {/* WhatsApp */}
                 <a
-                  className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                  className="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                   href="#"
                 >
                   <svg
@@ -271,7 +268,7 @@ const Footer = () => {
                   </svg>
                 </a>
               </div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-xs text-zinc-700 dark:text-zinc-300">
                 Website by V&N Digital Solutions
               </p>
             </div>
