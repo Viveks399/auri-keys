@@ -180,10 +180,12 @@ const PropertySchema = new Schema<Property>(
   {
     timestamps: true, // Automatically creates createdAt and updatedAt fields
     toJSON: {
-      transform: function (doc, ret) {
+      transform: function (_doc, ret) {
         ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (ret as any)._id;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (ret as any).__v;
         return ret;
       },
     },

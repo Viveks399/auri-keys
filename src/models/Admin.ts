@@ -41,11 +41,14 @@ const AdminSchema = new Schema<Admin>(
   {
     timestamps: true,
     toJSON: {
-      transform: function (doc, ret) {
+      transform: function (_doc, ret) {
         ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
-        delete ret.password; // Never return password in JSON
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (ret as any)._id;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (ret as any).__v;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (ret as any).password; // Never return password in JSON
         return ret;
       },
     },

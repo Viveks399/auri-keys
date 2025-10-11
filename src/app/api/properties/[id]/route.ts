@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { propertyStore } from "@/lib/propertyStore";
 import { UpdatePropertyDTO, ApiResponse, Property } from "@/types/property";
 import { authenticateAdmin, unauthorizedResponse } from "@/lib/authMiddleware";
+import { uploadImage } from "@/lib/cloudinary";
 
 // GET /api/properties/[id] - Get a single property by ID (Protected - Requires Authentication)
 export async function GET(
@@ -55,7 +56,69 @@ export async function PUT(
     }
 
     const { id } = await params;
-    const body: UpdatePropertyDTO = await request.json();
+    const contentType = request.headers.get("content-type") || "";
+    let body: UpdatePropertyDTO;
+    let newImageUrls: string[] = [];
+
+    // Handle both form-data (with files) and JSON requests
+    if (contentType.includes("multipart/form-data")) {
+      // Handle form data with file uploads
+      const formData = await request.formData();
+
+      // Parse property data from form field
+      const propertyDataField = formData.get("propertyData");
+      if (!propertyDataField) {
+        const response: ApiResponse<never> = {
+          success: false,
+          error:
+            "Missing propertyData field. Send property details as JSON string in 'propertyData' field",
+        };
+        return NextResponse.json(response, { status: 400 });
+      }
+
+      try {
+        body = JSON.parse(propertyDataField.toString());
+      } catch (parseError) {
+        const response: ApiResponse<never> = {
+          success: false,
+          error: "Invalid JSON in propertyData field",
+        };
+        return NextResponse.json(response, { status: 400 });
+      }
+
+      // Handle new file uploads
+      const files: File[] = [];
+      formData.forEach((value, key) => {
+        if (key === "images" && value instanceof File) {
+          files.push(value);
+        }
+      });
+
+      // Upload new images to Cloudinary
+      if (files.length > 0) {
+        const uploadPromises = files.map(async (file) => {
+          const bytes = await file.arrayBuffer();
+          const buffer = Buffer.from(bytes);
+          const base64Image = `data:${file.type};base64,${buffer.toString(
+            "base64"
+          )}`;
+
+          return uploadImage(base64Image, "properties");
+        });
+
+        const uploadResults = await Promise.all(uploadPromises);
+        newImageUrls = uploadResults.map(
+          (result: { url: string; publicId: string }) => result.url
+        );
+      }
+
+      // Merge existing images with new images
+      const existingImages = Array.isArray(body.images) ? body.images : [];
+      body.images = [...existingImages, ...newImageUrls];
+    } else {
+      // Handle regular JSON request
+      body = await request.json();
+    }
 
     // Validate price if provided
     if (body.price !== undefined && body.price <= 0) {

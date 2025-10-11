@@ -70,7 +70,7 @@ class PropertyStore {
     await this.ensureConnection();
 
     // Build update object, handling nested updates properly
-    const updateData: any = { ...data };
+    const updateData: Record<string, unknown> = { ...data };
 
     // Handle location partial updates
     if (data.location) {
@@ -83,13 +83,13 @@ class PropertyStore {
       }
     }
 
-    // Handle features partial updates
-    if (data.features) {
+    // Handle seller partial updates
+    if (data.seller) {
       const existingProperty = await PropertyModel.findById(id);
       if (existingProperty) {
-        updateData.features = {
-          ...existingProperty.features,
-          ...data.features,
+        updateData.seller = {
+          ...existingProperty.seller,
+          ...data.seller,
         };
       }
     }
@@ -132,13 +132,16 @@ class PropertyStore {
   }): Promise<Property[]> {
     await this.ensureConnection();
 
-    const query: any = {};
+    const query: Record<string, unknown> = {};
 
-    if (filters.minPrice) {
-      query.price = { ...query.price, $gte: filters.minPrice };
-    }
-    if (filters.maxPrice) {
-      query.price = { ...query.price, $lte: filters.maxPrice };
+    if (filters.minPrice || filters.maxPrice) {
+      query.price = {};
+      if (filters.minPrice) {
+        (query.price as Record<string, unknown>).$gte = filters.minPrice;
+      }
+      if (filters.maxPrice) {
+        (query.price as Record<string, unknown>).$lte = filters.maxPrice;
+      }
     }
     if (filters.city) {
       query["location.city"] = { $regex: filters.city, $options: "i" };
