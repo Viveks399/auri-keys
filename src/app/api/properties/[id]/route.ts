@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { propertyStore } from "@/lib/propertyStore";
 import { UpdatePropertyDTO, ApiResponse, Property } from "@/types/property";
 import { authenticateAdmin, unauthorizedResponse } from "@/lib/authMiddleware";
-import { uploadImage } from "@/lib/cloudinary";
+import {
+  uploadImage,
+  deleteMultipleImages,
+  extractPublicId,
+} from "@/lib/cloudinary";
 
 // GET /api/properties/[id] - Get a single property by ID (Protected - Requires Authentication)
 export async function GET(
@@ -56,6 +60,17 @@ export async function PUT(
     }
 
     const { id } = await params;
+
+    // Get the existing property to track image changes
+    const existingProperty = await propertyStore.getById(id);
+    if (!existingProperty) {
+      const response: ApiResponse<never> = {
+        success: false,
+        error: "Property not found",
+      };
+      return NextResponse.json(response, { status: 404 });
+    }
+
     const contentType = request.headers.get("content-type") || "";
     let body: UpdatePropertyDTO;
     let newImageUrls: string[] = [];
@@ -120,6 +135,34 @@ export async function PUT(
       body = await request.json();
     }
 
+    // Handle image deletion - find images that were removed
+    const existingImageUrls = existingProperty.images || [];
+    const newImageUrlsFromBody = Array.isArray(body.images) ? body.images : [];
+
+    // Find images that were removed (exist in old but not in new)
+    const removedImages = existingImageUrls.filter(
+      (url) => !newImageUrlsFromBody.includes(url)
+    );
+
+    // Delete removed images from Cloudinary
+    if (removedImages.length > 0) {
+      try {
+        const publicIdsToDelete = removedImages
+          .map((url) => extractPublicId(url))
+          .filter((id): id is string => id !== null);
+
+        if (publicIdsToDelete.length > 0) {
+          await deleteMultipleImages(publicIdsToDelete);
+          console.log(
+            `Deleted ${publicIdsToDelete.length} images from Cloudinary`
+          );
+        }
+      } catch (deleteError) {
+        console.error("Error deleting images from Cloudinary:", deleteError);
+        // Continue with the update even if image deletion fails
+      }
+    }
+
     // Validate price if provided
     if (body.price !== undefined && body.price <= 0) {
       const response: ApiResponse<never> = {
@@ -178,9 +221,10 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    const deleted = await propertyStore.delete(id);
 
-    if (!deleted) {
+    // Get the property first to access its images
+    const property = await propertyStore.getById(id);
+    if (!property) {
       const response: ApiResponse<never> = {
         success: false,
         error: "Property not found",
@@ -188,9 +232,40 @@ export async function DELETE(
       return NextResponse.json(response, { status: 404 });
     }
 
+    // Delete all images from Cloudinary before deleting the property
+    const imageUrls = property.images || [];
+    if (imageUrls.length > 0) {
+      try {
+        const publicIdsToDelete = imageUrls
+          .map((url) => extractPublicId(url))
+          .filter((id): id is string => id !== null);
+
+        if (publicIdsToDelete.length > 0) {
+          await deleteMultipleImages(publicIdsToDelete);
+          console.log(
+            `Deleted ${publicIdsToDelete.length} images from Cloudinary for property ${id}`
+          );
+        }
+      } catch (deleteError) {
+        console.error("Error deleting images from Cloudinary:", deleteError);
+        // Continue with property deletion even if image deletion fails
+      }
+    }
+
+    // Delete the property from database
+    const deleted = await propertyStore.delete(id);
+
+    if (!deleted) {
+      const response: ApiResponse<never> = {
+        success: false,
+        error: "Failed to delete property from database",
+      };
+      return NextResponse.json(response, { status: 500 });
+    }
+
     const response: ApiResponse<never> = {
       success: true,
-      message: "Property deleted successfully",
+      message: "Property and associated images deleted successfully",
     };
 
     return NextResponse.json(response, { status: 200 });
