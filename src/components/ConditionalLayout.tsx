@@ -3,6 +3,8 @@
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AuriLoader from "@/components/AuriLoader";
+import { useInitialLoader } from "@/hooks/useInitialLoader";
 
 export default function ConditionalLayout({
   children,
@@ -10,6 +12,7 @@ export default function ConditionalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { showLoader, isLoading } = useInitialLoader();
 
   // Check if we're on an admin page
   const isAdminPage = pathname?.startsWith("/admin");
@@ -17,6 +20,11 @@ export default function ConditionalLayout({
   // If it's an admin page, don't show Header and Footer
   if (isAdminPage) {
     return <>{children}</>;
+  }
+
+  // Show loader and prevent main content from rendering
+  if (showLoader) {
+    return <AuriLoader isLoading={isLoading} />;
   }
 
   // For all other pages, show Header and Footer
