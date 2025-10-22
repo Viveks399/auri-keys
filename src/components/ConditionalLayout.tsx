@@ -12,7 +12,7 @@ export default function ConditionalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { showLoader, isLoading } = useInitialLoader();
+  const { showLoader, isLoading, contentLoaded } = useInitialLoader();
 
   // Check if we're on an admin page
   const isAdminPage = pathname?.startsWith("/admin");
@@ -22,8 +22,8 @@ export default function ConditionalLayout({
     return <>{children}</>;
   }
 
-  // Show loader and prevent main content from rendering
-  if (showLoader) {
+  // Show loader while content is loading (simulating 3 seconds of content loading)
+  if (showLoader && !contentLoaded) {
     return <AuriLoader isLoading={isLoading} />;
   }
 
