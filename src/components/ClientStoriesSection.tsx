@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const ClientStoriesSection: React.FC = () => {
   return (
@@ -13,10 +14,12 @@ const ClientStoriesSection: React.FC = () => {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="flex flex-col gap-4 rounded-xl border border-zinc-200/80 bg-background-light p-6 shadow-sm dark:border-zinc-800/80 dark:bg-background-dark">
             <div className="flex items-center gap-4">
-              <img
+              <Image
                 alt="Sophia Carter"
                 className="h-12 w-12 rounded-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRKNa2tG6WsAVIROa8-O8J84p8RKMK0ZV6-QnUB3JjRaZvRZJfxtt5oi_2tXvJNjfW5TudUqDCM7s1-tOnuPEHK3ARYRHJlu78eqzWOBGcj5DgQ3o1UjEVZhreZl122Et88y8kQGSY3dNtKAUoFRxtfGUJFYdNzgDmrM8DKa553gQZr-AvDf90RorGq4Ojq0-wQdcFYF4jFOhhAkU6dIiLCRhlIfPJEK_Y55ThyZPpuKyNzE_VSHQW6P1Ux3NCOMtCSVSVAtpQsyfL"
+                src="https://ui-avatars.com/api/?name=Sophia+Carter&background=random&color=fff&size=48"
+                width={48}
+                height={48}
               />
               <div>
                 <p className="font-semibold text-zinc-900">Sophia Carter</p>
@@ -51,10 +54,12 @@ const ClientStoriesSection: React.FC = () => {
 
           <div className="flex flex-col gap-4 rounded-xl border border-zinc-200/80 bg-background-light p-6 shadow-sm dark:border-zinc-800/80 dark:bg-background-dark">
             <div className="flex items-center gap-4">
-              <img
+              <Image
                 alt="Ethan Bennett"
                 className="h-12 w-12 rounded-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0RtYpX01nWwy32cpWKnHORowDSsz9JieDGRtsBTWHyQ_LiN8CUcikTaPW7xKvUQwv9uBeFfhevQswto1aJQE6S7JR8X-aRdBC5FScLCRvxj4m-WyQ1-UH7CfN0a03aeF2Evy1OhXDmfXEZQxrdnvrfAt5aFJW3B9dgosad11tmUfg5qbCchCeWWih6pzx4RtqrOhM5sxnbnK6AVXcpZL39zjEk1klstapI_4JhYOqz-vXoPhFUvgHfQ-fl8ETaN9QaEVn2cThDe25"
+                src="https://ui-avatars.com/api/?name=Ethan+Bennett&background=random&color=fff&size=48"
+                width={48}
+                height={48}
               />
               <div>
                 <p className="font-semibold text-zinc-900">Ethan Bennett</p>
@@ -88,10 +93,12 @@ const ClientStoriesSection: React.FC = () => {
 
           <div className="flex flex-col gap-4 rounded-xl border border-zinc-200/80 bg-background-light p-6 shadow-sm dark:border-zinc-800/80 dark:bg-background-dark">
             <div className="flex items-center gap-4">
-              <img
+              <Image
                 alt="Olivia Hayes"
                 className="h-12 w-12 rounded-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjFfXzJDxWPwt3q9r6S_iJAQ_1s3v3FQb0gKqDfpZWO-UnNHX1GAyyYkpFJ5sK0l_dJNSNRFsnNEu8n-g5tguP6fPmLAdQcx87FR6VpLq1HWn_bFgDhuS1AVt3A0f2haXnrLkhGhf-cALjnBC2ulURvTDQ6ZSdA828ntLAvmM1fk01WHb6GVM87j8e-1jRU0g-kiTX-XOfMEUUBiQn3fU_RCxG3oteCiR-M6iw47MB9WbrwyZC5lrYSh2sz3J5M_QfK8q-tb0276Fr"
+                src="https://ui-avatars.com/api/?name=Olivia+Hayes&background=random&color=fff&size=48"
+                width={48}
+                height={48}
               />
               <div>
                 <p className="font-semibold text-zinc-900">Olivia Hayes</p>

@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
 
       try {
         body = JSON.parse(propertyDataField.toString());
-      } catch (parseError) {
+      } catch {
         const response: ApiResponse<never> = {
           success: false,
           error: "Invalid JSON in propertyData field",
