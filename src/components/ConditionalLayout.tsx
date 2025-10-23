@@ -39,6 +39,20 @@ export default function ConditionalLayout({
     }
   }, [carouselImagesLoaded, minDurationReached]);
 
+  // Prevent body scrolling when loading screen is shown
+  useEffect(() => {
+    if (showLoadingScreen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup function to ensure overflow is reset when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showLoadingScreen]);
+
   // Fallback timer to ensure loading screen doesn't stay forever
   useEffect(() => {
     const fallbackTimer = setTimeout(() => {

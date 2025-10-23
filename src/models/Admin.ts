@@ -55,8 +55,7 @@ const AdminSchema = new Schema<Admin>(
   }
 );
 
-// Add index for email lookups
-AdminSchema.index({ email: 1 });
+// Email index is automatically created by unique: true constraint
 
 // Create the model or use existing one
 const AdminModel: Model<Admin> =

@@ -17,7 +17,7 @@ const ClientStoriesSection: React.FC = () => {
               <Image
                 alt="Sophia Carter"
                 className="h-12 w-12 rounded-full object-cover"
-                src="https://ui-avatars.com/api/?name=Sophia+Carter&background=random&color=fff&size=48"
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
                 width={48}
                 height={48}
               />
@@ -57,7 +57,7 @@ const ClientStoriesSection: React.FC = () => {
               <Image
                 alt="Ethan Bennett"
                 className="h-12 w-12 rounded-full object-cover"
-                src="https://ui-avatars.com/api/?name=Ethan+Bennett&background=random&color=fff&size=48"
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
                 width={48}
                 height={48}
               />
@@ -96,7 +96,7 @@ const ClientStoriesSection: React.FC = () => {
               <Image
                 alt="Olivia Hayes"
                 className="h-12 w-12 rounded-full object-cover"
-                src="https://ui-avatars.com/api/?name=Olivia+Hayes&background=random&color=fff&size=48"
+                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
                 width={48}
                 height={48}
               />
