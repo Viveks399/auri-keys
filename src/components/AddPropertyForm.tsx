@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { authenticatedFetch } from "@/lib/authUtils";
 import { Property } from "@/types/property";
@@ -829,9 +830,11 @@ export default function AddPropertyForm({
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {existingImages.map((image, index) => (
                         <div key={index} className="relative group">
-                          <img
+                          <Image
                             src={image}
                             alt={`Existing ${index + 1}`}
+                            width={128}
+                            height={128}
                             className="w-full h-32 object-cover rounded-lg border-2 border-blue-200"
                           />
                           <button
@@ -868,9 +871,11 @@ export default function AddPropertyForm({
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {imagePreviews.map((preview, index) => (
                         <div key={index} className="relative group">
-                          <img
+                          <Image
                             src={preview}
                             alt={`Preview ${index + 1}`}
+                            width={128}
+                            height={128}
                             className="w-full h-32 object-cover rounded-lg"
                           />
                           <button

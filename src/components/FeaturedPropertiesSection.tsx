@@ -16,7 +16,7 @@ const FeaturedPropertiesSection: React.FC = () => {
               <div
                 className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                 style={{
-                  backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAXOyGf9vBT33EZ3yMA0Py0WUW7k4O2-B48rPx41dIvHu7k-ZKXy9EtzzwOAQu1lI5EYBaHiFE0VNzvxmQZ_enki9fICwyNDBRPH7wDm49gQQ5hPej7f_FpNs5mMdLoR8gjhvfGs0j344espDej-9gUwVVejx0JOdPOTdAdHh--jasnA_NSZRsi0bAFxvbILJg-2uKQMepUf2MyU_cgsc8GEx3RShCXvHRGINYUTfTQ7zmIn28G0E023mxH_UKuH3WDXmA9GTx3WsY")`,
+                  backgroundImage: `url("https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80")`,
                 }}
               />
             </div>
@@ -35,7 +35,7 @@ const FeaturedPropertiesSection: React.FC = () => {
               <div
                 className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                 style={{
-                  backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuBNwxd2EqMSwM8Bw1fvBId_q2_wnBloBguPpIeyFBsYM4_vjrZtxVygiXmQNiBkgQgPKWRCl-ppjiylX3EcW8cpfYY2_hVQ_CLxEXTUlVlr9RsCJ0szfdv5dNMy0IuPBm4-nuvxtx5zT_Ipw_fYrdpOr3Vvip7gJFKa1KpsatinbqKDOn9rdfSCRX2ZUAs5sEWFiWqPU31aKXs8h4h6vkh40Pk9Bz2oRjcLu1T2D_ZYqEiD0ZpMn7gkPy2Nd8NVS7RZI5jVc2fQSb26")`,
+                  backgroundImage: `url("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")`,
                 }}
               />
             </div>
@@ -54,7 +54,7 @@ const FeaturedPropertiesSection: React.FC = () => {
               <div
                 className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                 style={{
-                  backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuCZFzBcDFmc5u_5WUUtsF1uKoKsOYMKGECmGFGYxuTXDif12lD3gtPqANLI2bpqJ5Idlpd8VXqOPAeam9vgMMA8KuY2Jm_kJp1ZVXHo0RifZCajVElZTkLWOBWrNn242P_ouTlpqzBwpPn0wqC8vC1mNzP72YdKa5EHWgupXdVYQkEmZrtQVQ83VsCVj8yQqsEMtbzpqPFrXEx_xFkZcn5Jp7xNG0vYgkX2Q-Pxei-JqvBPZGsYOgNeYgEbP1Cqk1U9QA81ghw4D6zs")`,
+                  backgroundImage: `url("https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")`,
                 }}
               />
             </div>

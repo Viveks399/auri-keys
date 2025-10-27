@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import AddPropertyForm from "@/components/AddPropertyForm";
 import { Property } from "@/types/property";
@@ -15,18 +15,7 @@ export default function EditPropertyPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    // Check authentication
-    const token = getAuthToken();
-    if (!token) {
-      router.push("/admin/login");
-      return;
-    }
-
-    fetchProperty();
-  }, [id]);
-
-  const fetchProperty = async () => {
+  const fetchProperty = useCallback(async () => {
     try {
       setLoading(true);
       const response = await authenticatedFetch(`/api/properties/${id}`);
@@ -42,7 +31,18 @@ export default function EditPropertyPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    // Check authentication
+    const token = getAuthToken();
+    if (!token) {
+      router.push("/admin/login");
+      return;
+    }
+
+    fetchProperty();
+  }, [id, fetchProperty, router]);
 
   if (loading) {
     return (

@@ -46,7 +46,7 @@ const LuxuryEstatesHomepage: React.FC = () => {
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-105"
                 style={{
-                  backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuBsRaqUX70uhH7yiYOIFlqfbMTFcj9gOXHI1B19gGTem3AdmCl5qswfXeRVWKdSrzSMwmQU_nu5uXlHfrpEQvyYWEEUUVOQHnmSl6Fd6xlXVeFqrkPkxAT-nRNouQVrrndKYrbtrNB-wFbeyLdZdK-hXGZ0bUkkTFCmCXENsyLHE_YXjHDVGHyHDWBnYee3vHUhSB-hpKmqtDfhFnxQkZ7l_AuOM9w7kMCYPlOf2RQTRnUVyGuHf3Uld6e-h1WgdcnxQa6J3ZTx1QtE")`,
+                  backgroundImage: `url("https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")`,
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-background-dark/20 to-transparent" />
@@ -77,7 +77,7 @@ const LuxuryEstatesHomepage: React.FC = () => {
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-105"
                 style={{
-                  backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjFHhlUKnQH2ddKL8KjePw8IytQo-BECI6MONaDKVPxElfHW70pflBwj8cTOmiJkNyUOcUxk4nYnPqaJ20oi8aZp9YGL7FGaCcpttrTWTe7zRd6cLytsnBk951Cy_qjfJHT0_7eijUAjpfK1g6Zt7UmAVh8tvTlh2p7ons2wU6kFVizSCyBZeVkWEbibl94hkhXYGR-Qp1-kdyX2ZI-GAUv_DtIGjcg72f-h9b8OBM7dBVAFQH_8Dalt1IyumrlGFPFR9pc1dsQglL")`,
+                  backgroundImage: `url("https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")`,
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-background-dark/20 to-transparent" />
@@ -108,7 +108,7 @@ const LuxuryEstatesHomepage: React.FC = () => {
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-105"
                 style={{
-                  backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuC6kjV7vJLeYQVcNdhnFKQKr8O46E5_E2RwTkCdTdw3phM4NROao_YI2yN8BffnO0OaahVQ-h0KVR8XHH6ExZJDifaTw8yDEKtYofkIA7hEXc8UX_fo7PZuLWYuVng8IkZwGOcx3gsvvjRMqgKXZw6fC19gsZfEHCtNMmAgJ5V4mIiTGUjeA9kpDCZguP-KMiTp-Lay9t0ocb9czlccE4RoXAZ-FoGqr9LwCB98Ovs_3PKMGIvEeqeVH3dDHCoVmuz5X6-qR42J2yed")`,
+                  backgroundImage: `url("https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2076&q=80")`,
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-background-dark/20 to-transparent" />

@@ -39,7 +39,7 @@ export async function authenticateAdmin(
       authenticated: true,
       admin: decoded,
     };
-  } catch (error) {
+  } catch {
     return {
       authenticated: false,
       error: "Authentication failed",

@@ -4,14 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "tsx scripts/seed-db.ts"
+    "seed": "tsx scripts/seed-db.ts",
+    "check-unused": "ts-prune --project ./tsconfig.prune.json --ignore \"src\\\\app\\\\layout.tsx|default\" --ignore \"src\\\\app\\\\layout.tsx|metadata\" --ignore \"src\\\\app\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\dashboard\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\login\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\signup\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\properties\\\\[id]\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\properties\\\\new\\\\page.tsx|default\" --ignore \".*page.tsx|default\" --ignore \"src\\\\app\\\\api.*|(GET|POST|PUT|PATCH|DELETE)\""
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.7.0",
+    "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "gsap": "^3.13.0",
     "jsonwebtoken": "^9.0.2",
@@ -19,7 +21,8 @@
     "motion": "^12.23.22",
     "next": "15.5.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

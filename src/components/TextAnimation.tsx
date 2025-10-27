@@ -7,7 +7,7 @@ interface TextAnimationProps {
   showText: boolean;
 }
 
-const TextAnimation: React.FC<TextAnimationProps> = ({ showText }) => {
+const TextAnimation: React.FC<TextAnimationProps> = () => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -17,13 +17,12 @@ const TextAnimation: React.FC<TextAnimationProps> = ({ showText }) => {
     >
       <svg
         width="100%"
-        height="auto"
         viewBox="0 0 1000 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-auto max-h-20 sm:max-h-24 md:max-h-32 lg:max-h-40"
       >
-        {LETTERS_DATA.map((letterData, index) => (
+        {LETTERS_DATA.map((letterData) => (
           <AnimatedLetter key={letterData.letter} letterData={letterData} />
         ))}
       </svg>

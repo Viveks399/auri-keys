@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Property } from "@/types/property";
 import {
   getAdminData,
@@ -32,21 +33,7 @@ export default function AdminDashboard() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
 
-  useEffect(() => {
-    // Check authentication
-    const token = getAuthToken();
-    const adminData = getAdminData();
-
-    if (!token || !adminData) {
-      window.location.href = "/admin/login";
-      return;
-    }
-
-    setAdmin(adminData);
-    fetchProperties();
-  }, []);
-
-  const fetchProperties = async () => {
+  const fetchProperties = useCallback(async () => {
     try {
       setLoading(true);
       const response = await authenticatedFetch("/api/properties");
@@ -65,7 +52,21 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // Check authentication
+    const token = getAuthToken();
+    const adminData = getAdminData();
+
+    if (!token || !adminData) {
+      window.location.href = "/admin/login";
+      return;
+    }
+
+    setAdmin(adminData);
+    fetchProperties();
+  }, [fetchProperties]);
 
   const calculateStats = (props: Property[]) => {
     const stats = {
@@ -397,9 +398,11 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4">
                         <div className="flex items-center">
                           {property.images && property.images.length > 0 ? (
-                            <img
+                            <Image
                               src={property.images[0]}
                               alt={property.title}
+                              width={60}
+                              height={60}
                               className="w-16 h-16 rounded-lg object-cover mr-4"
                             />
                           ) : (
@@ -569,9 +572,11 @@ export default function AdminDashboard() {
                 <div className="mb-6">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {viewingProperty.images.map((image, index) => (
-                      <img
+                      <Image
                         key={index}
                         src={image}
+                        width={200}
+                        height={200}
                         alt={`${viewingProperty.title} - ${index + 1}`}
                         className="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow"
                       />

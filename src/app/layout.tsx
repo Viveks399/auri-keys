@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Manrope } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from "@/components/ConditionalLayout";
+import { CarouselLoadingProvider } from "@/contexts/CarouselLoadingContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,17 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className={`${geistSans.variable} ${manrope.variable} antialiased`}>
-        <ConditionalLayout>{children}</ConditionalLayout>
+      <body className={`${geistSans.variable} ${manrope.variable} antialiased`} suppressHydrationWarning={true}>
+        <CarouselLoadingProvider>
+          <ConditionalLayout>{children}</ConditionalLayout>
+        </CarouselLoadingProvider>
       </body>
     </html>
   );

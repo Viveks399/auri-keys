@@ -4,7 +4,8 @@ import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AuriLoader from "@/components/AuriLoader";
-import { useInitialLoader } from "@/hooks/useInitialLoader";
+import { useCarouselLoading } from "@/contexts/CarouselLoadingContext";
+import { useState, useEffect } from "react";
 
 export default function ConditionalLayout({
   children,
@@ -12,24 +13,70 @@ export default function ConditionalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { showLoader, isLoading } = useInitialLoader();
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+  const [minDurationReached, setMinDurationReached] = useState(false);
+  const { carouselImagesLoaded } = useCarouselLoading();
 
   // Check if we're on an admin page
   const isAdminPage = pathname?.startsWith("/admin");
+
+  // Ensure minimum duration for loading screen (1.5 seconds)
+  useEffect(() => {
+    const minDurationTimer = setTimeout(() => {
+      setMinDurationReached(true);
+    }, 3500); // 1.5 seconds minimum
+
+    return () => clearTimeout(minDurationTimer);
+  }, []);
+
+  // Hide loading screen when both conditions are met
+  useEffect(() => {
+    if (carouselImagesLoaded && minDurationReached) {
+      // Add a small delay to ensure smooth transition
+      setTimeout(() => {
+        setShowLoadingScreen(false);
+      }, 300);
+    }
+  }, [carouselImagesLoaded, minDurationReached]);
+
+  // Prevent body scrolling when loading screen is shown
+  useEffect(() => {
+    if (showLoadingScreen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup function to ensure overflow is reset when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showLoadingScreen]);
+
+  // Fallback timer to ensure loading screen doesn't stay forever
+  useEffect(() => {
+    const fallbackTimer = setTimeout(() => {
+      setShowLoadingScreen(false);
+    }, 5000); // 5 second fallback
+
+    return () => clearTimeout(fallbackTimer);
+  }, []);
 
   // If it's an admin page, don't show Header and Footer
   if (isAdminPage) {
     return <>{children}</>;
   }
 
-  // Show loader and prevent main content from rendering
-  if (showLoader) {
-    return <AuriLoader isLoading={isLoading} />;
-  }
-
   // For all other pages, show Header and Footer
   return (
     <>
+      {/* Full page loading screen */}
+      {showLoadingScreen && (
+        <div className="fixed inset-0 z-[9999] bg-black">
+          <AuriLoader isLoading={true} />
+        </div>
+      )}
+      
       <Header />
       <div className="relative">
         <main className="main-content">{children}</main>

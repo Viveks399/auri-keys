@@ -1,0 +1,24 @@
+{
+  "ignore": [
+    "src\\app\\layout.tsx|default",
+    "src\\app\\layout.tsx|metadata",
+    "src\\app\\page.tsx|default",
+    "src\\app\\admin\\dashboard\\page.tsx|default",
+    "src\\app\\admin\\login\\page.tsx|default",
+    "src\\app\\admin\\signup\\page.tsx|default",
+    "src\\app\\admin\\properties\\[id]\\page.tsx|default",
+    "src\\app\\admin\\properties\\new\\page.tsx|default",
+    "src\\app\\api\\properties\\route.ts|GET",
+    "src\\app\\api\\properties\\route.ts|POST",
+    "src\\app\\api\\auth\\login\\route.ts|POST",
+    "src\\app\\api\\auth\\signup\\route.ts|POST",
+    "src\\app\\api\\properties\\[id]\\route.ts|GET",
+    "src\\app\\api\\properties\\[id]\\route.ts|PUT",
+    "src\\app\\api\\properties\\[id]\\route.ts|PATCH",
+    "src\\app\\api\\properties\\[id]\\route.ts|DELETE",
+    "src\\app\\api\\upload\\images\\route.ts|POST",
+    "src\\app\\api\\upload\\images\\delete\\route.ts|DELETE",
+    "src\\app\\api\\upload\\images\\file\\route.ts|POST"
+  ]
+}
+  
