@@ -6,7 +6,6 @@ import FeaturedPropertiesSection from "@/components/FeaturedPropertiesSection";
 import ExploreAreasSection from "@/components/ExploreAreasSection";
 import AboutAuriSection from "@/components/AboutAuriSection";
 import PropertyGallerySection from "@/components/PropertyGallerySection";
-import ClientStoriesSection from "@/components/ClientStoriesSection";
 import PartnersSection from "@/components/PartnersSection";
 import CTASection from "@/components/CTASection";
 import ContactFormSection from "@/components/ContactFormSection";
@@ -21,7 +20,6 @@ export default function Home() {
         <ExploreAreasSection />
         <AboutAuriSection />
         <PropertyGallerySection />
-        <ClientStoriesSection />
         <PartnersSection />
         <CTASection />
         <ContactFormSection />

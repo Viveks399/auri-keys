@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "tsx scripts/seed-db.ts"
+    "seed": "tsx scripts/seed-db.ts",
+    "check-unused": "ts-prune --project ./tsconfig.prune.json --ignore \"src\\\\app\\\\layout.tsx|default\" --ignore \"src\\\\app\\\\layout.tsx|metadata\" --ignore \"src\\\\app\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\dashboard\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\login\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\signup\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\properties\\\\[id]\\\\page.tsx|default\" --ignore \"src\\\\app\\\\admin\\\\properties\\\\new\\\\page.tsx|default\" --ignore \".*page.tsx|default\" --ignore \"src\\\\app\\\\api.*|(GET|POST|PUT|PATCH|DELETE)\""
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
