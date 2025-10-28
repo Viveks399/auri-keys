@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import EmblaCarousel from "./EmblaCarousel";
-import ImagePreloader from "./ImagePreloader";
 import { useCarouselLoading } from "@/contexts/CarouselLoadingContext";
 
 const PropertySearchSection: React.FC = () => {
@@ -29,7 +28,6 @@ const PropertySearchSection: React.FC = () => {
   };
 
   const handleCarouselImagesLoaded = () => {
-    console.log('PropertySearchSection: Carousel images loaded');
     setCarouselImagesLoaded(true);
   };
 
@@ -78,14 +76,6 @@ const PropertySearchSection: React.FC = () => {
       subtitle: "Smart Investments",
       description: "Maximize your returns with strategic real estate investments in Dubai's booming market",
       features: ["High ROI", "Rental Income", "Capital Appreciation", "Tax Benefits"]
-    },
-    {
-      src: "/assets/images/landing page/PropertySearchSection-background-image-5.avif",
-      alt: "Luxury Lifestyle",
-      title: "Luxury Lifestyle",
-      subtitle: "Premium Living",
-      description: "Indulge in the ultimate luxury lifestyle with our exclusive property portfolio",
-      features: ["Private Marina", "Helipad Access", "Wine Cellar", "Home Theater"]
     }
   ];
 
@@ -97,19 +87,14 @@ const PropertySearchSection: React.FC = () => {
     containScroll: "trimSnaps" as const,
   };
 
-  // Extract image sources for preloading
-  const imageSources = slides.map(slide => slide.src);
-
   return (
     <div className="relative min-h-screen flex flex-col overflow-hidden">
-      {/* Preload images */}
-      <ImagePreloader images={imageSources} onAllLoaded={handleCarouselImagesLoaded} />
-      
       {/* Background Carousel */}
       <div className="absolute inset-0 w-full h-full">
         <EmblaCarousel 
           slides={slides} 
           options={carouselOptions}
+          onImagesLoaded={handleCarouselImagesLoaded}
         />
       </div>
 

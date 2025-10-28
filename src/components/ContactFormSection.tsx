@@ -85,7 +85,6 @@ const ContactFormSection: React.FC = () => {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Form submitted:", formData);
 
       // Reset form on success
       setFormData({
