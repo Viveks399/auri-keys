@@ -13,7 +13,6 @@ export const CarouselLoadingProvider: React.FC<{ children: ReactNode }> = ({ chi
   const [carouselImagesLoaded, setCarouselImagesLoaded] = useState(false);
 
   const updateCarouselImagesLoaded = (loaded: boolean) => {
-    console.log('Context: Setting carousel images loaded to:', loaded);
     setCarouselImagesLoaded(loaded);
   };
 

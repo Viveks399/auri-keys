@@ -153,9 +153,6 @@ export async function PUT(
 
         if (publicIdsToDelete.length > 0) {
           await deleteMultipleImages(publicIdsToDelete);
-          console.log(
-            `Deleted ${publicIdsToDelete.length} images from Cloudinary`
-          );
         }
       } catch (deleteError) {
         console.error("Error deleting images from Cloudinary:", deleteError);
@@ -242,9 +239,6 @@ export async function DELETE(
 
         if (publicIdsToDelete.length > 0) {
           await deleteMultipleImages(publicIdsToDelete);
-          console.log(
-            `Deleted ${publicIdsToDelete.length} images from Cloudinary for property ${id}`
-          );
         }
       } catch (deleteError) {
         console.error("Error deleting images from Cloudinary:", deleteError);

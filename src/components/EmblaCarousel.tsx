@@ -31,7 +31,7 @@ const MemoizedImage = React.memo(({ src, alt, index, onLoad }: {
       unoptimized={true}
       onLoad={onLoad}
       sizes="100vw"
-      quality={85}
+      loading={index === 0 ? "eager" : "lazy"}
     />
   );
 });
@@ -104,8 +104,7 @@ const EmblaCarousel: React.FC<PropType> = React.memo((props) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [isAutoplayActive, setIsAutoplayActive] = React.useState(true)
   const [isPageVisible, setIsPageVisible] = React.useState(true)
-  const [loadedImages, setLoadedImages] = React.useState<Set<number>>(new Set())
-  const [imagesVisible, setImagesVisible] = React.useState(false)
+  const [loadedImagesCount, setLoadedImagesCount] = React.useState(0)
   const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const tweenFactor = useRef(0)
   const tweenNodes = useRef<HTMLElement[]>([])
@@ -117,49 +116,17 @@ const EmblaCarousel: React.FC<PropType> = React.memo((props) => {
     onNextButtonClick
   } = usePrevNextButtons(emblaApi)
 
-  // Track image loading
+  // Track individual image loads
   const handleImageLoad = React.useCallback((index: number) => {
-    setLoadedImages(prev => {
-      const newSet = new Set(prev)
-      newSet.add(index)
-      return newSet
-    })
+    setLoadedImagesCount(prev => prev + 1)
   }, [])
-
-  // Preload all images on component mount
-  React.useEffect(() => {
-    slides.forEach((slide, index) => {
-      const img = new window.Image();
-      img.onload = () => {
-        console.log(`Preloaded image ${index}:`, slide.src);
-        handleImageLoad(index);
-      };
-      img.onerror = () => {
-        console.error(`Failed to preload image ${index}:`, slide.src);
-        // Still count as loaded to prevent infinite waiting
-        handleImageLoad(index);
-      };
-      img.src = slide.src;
-    });
-  }, [slides, handleImageLoad]);
 
   // Check if all images are loaded
   React.useEffect(() => {
-    if (loadedImages.size === slides.length) {
-      // Add a small delay to ensure images are rendered before marking as visible
-      setTimeout(() => {
-        setImagesVisible(true)
-      }, 100)
+    if (loadedImagesCount === slides.length && props.onImagesLoaded) {
+      props.onImagesLoaded(true)
     }
-  }, [loadedImages.size, slides.length])
-
-  // Expose loading state to parent
-  React.useEffect(() => {
-    console.log('Carousel images loaded:', loadedImages.size === slides.length, 'visible:', imagesVisible, 'out of', slides.length);
-    if (props.onImagesLoaded) {
-      props.onImagesLoaded(imagesVisible)
-    }
-  }, [imagesVisible, props, loadedImages.size, slides.length])
+  }, [loadedImagesCount, slides.length, props])
 
   const initializeParallax = useCallback((emblaApi: EmblaCarouselType) => {
     tweenNodes.current = emblaApi.slideNodes().map(slideNode => 
