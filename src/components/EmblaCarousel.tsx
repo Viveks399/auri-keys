@@ -50,14 +50,14 @@ const MemoizedSlide = React.memo(({ slide, index, onImageLoad }: {
   }
   index: number
   selectedIndex: number
-  onImageLoad: (index: number) => void
+  onImageLoad: () => void
 }) => {
   const [imageLoaded, setImageLoaded] = React.useState(false);
 
   const handleImageLoad = React.useCallback(() => {
     setImageLoaded(true);
-    onImageLoad(index);
-  }, [onImageLoad, index]);
+    onImageLoad();
+  }, [onImageLoad]);
 
   return (
   <div className="embla__slide">
@@ -117,7 +117,7 @@ const EmblaCarousel: React.FC<PropType> = React.memo((props) => {
   } = usePrevNextButtons(emblaApi)
 
   // Track individual image loads
-  const handleImageLoad = React.useCallback((index: number) => {
+  const handleImageLoad = React.useCallback(() => {
     setLoadedImagesCount(prev => prev + 1)
   }, [])
 
